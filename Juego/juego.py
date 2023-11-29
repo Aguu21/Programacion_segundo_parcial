@@ -419,6 +419,22 @@ class Juego:
         corazon = pygame.transform.scale(corazon, (64, 64))
         mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
         
+        boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
+        boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
+        boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
+        boton_volver_unpress = pygame.transform.scale(boton_volver_unpress, (250, 100))
+
+        boton_volver = boton_volver_unpress
+        
+        boton_volver_rect = boton_volver.get_rect()
+        boton_volver_rect.x = ((self.pantalla.get_width() - 
+                                  boton_volver_press.get_size()[0])) // 2 
+        boton_volver_rect.y = 360
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 56)
+
+        texto_superficie = fuente_pixel.render(f"PAUSA", True, (0,0,0))
+
+
         protagonista = ""
         plataformas = []
         enemigos = []
@@ -504,8 +520,7 @@ class Juego:
                                                     protagonista.donde_apunto))
                             self.sonidos.play(disparo_protagonista_sonido)
             
-            self.pantalla.fill("Black")
-            self.pantalla.blit(background, (0, 0))
+            
             
             if pausa == False:
                 keys = pygame.key.get_pressed()
@@ -521,6 +536,9 @@ class Juego:
                     self.situacion = "Pantalla Final"
                     self.gano = False
 
+                self.pantalla.fill("Black")
+                self.pantalla.blit(background, (0, 0))
+                
                 self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
 
                 self.pantalla.blit(protagonista.obtener_animacion_actual(), (protagonista.obtener_posicion_x(), protagonista.obtener_posicion_y()))
@@ -560,8 +578,22 @@ class Juego:
                 for i in range(protagonista.vida):
                     self.pantalla.blit(corazon, (10 + 80 * i, 10))
             else:
+                if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
+                    boton_volver = boton_volver_press
+                    if pygame.mouse.get_pressed()[0]:
+                        pausa = False
+                else:
+                    boton_volver = boton_volver_unpress
 
-                pass
+                self.pantalla.blit(mini_pantalla, 
+                               (((self.pantalla.get_width() - 
+                                  mini_pantalla.get_size()[0])) // 2,
+                                 100))
+                self.pantalla.blit(boton_volver, (boton_volver_rect.x,
+                                                  boton_volver_rect.y))
+                self.pantalla.blit(texto_superficie, ((self.pantalla.get_width() - texto_superficie.get_size()[0]) // 2, 250))
+
+                
 
             if self.debug:
                 pygame.draw.rect(self.pantalla, (0,0,255), protagonista.obtener_rectangulo_principal(), 3)
