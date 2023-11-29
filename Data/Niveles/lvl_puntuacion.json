@@ -1,0 +1,32 @@
+[
+{
+    "Nivel": 1,
+    "Habilitado": "True",
+    "Total": 5,
+    "Conseguido": -1
+},
+{
+    "Nivel": 2,
+    "Habilitado": "False",
+    "Total": 10,
+    "Conseguido": -1
+},
+{
+    "Nivel": 3,
+    "Habilitado": "False",
+    "Total": 15,
+    "Conseguido": -1
+},
+{
+    "Nivel": 4,
+    "Habilitado": "False",
+    "Total": 20,
+    "Conseguido": -1
+},
+{
+    "Nivel": 5,
+    "Habilitado": "False",
+    "Total": 25,
+    "Conseguido": -1
+}
+]

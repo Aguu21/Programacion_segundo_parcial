@@ -1,12 +1,14 @@
 import pygame
 import sys
 import json
+import os
 from pygame.locals import *
 from Juego.Protagonista.protagonista import *
 from Juego.Plataforma.plataforma import *
 from Juego.Items.coleccionable import *
 from Juego.Enemigo.enemigo import *
 from Juego.Proyectil.proyectil import *
+from Juego.Boton.boton_nivel import *
 
 WIDTH = 1216
 HEIGHT = 608
@@ -58,12 +60,12 @@ class Juego:
 
         start_boton = start_boton_press
         start_rect = start_boton.get_rect()
-        start_rect.y = 300
-        start_rect.x = (self.pantalla.get_width() - start_boton.get_size()[0]) // 2
+        start_rect.y = 450
+        start_rect.x = 100
 
         options_boton = option_boton_press
         options_rect = options_boton.get_rect()
-        options_rect.x = (self.pantalla.get_width() - options_boton.get_size()[0]) // 2
+        options_rect.x = 650
         options_rect.y = 450
 
         run = True
@@ -77,7 +79,7 @@ class Juego:
                 start_boton = start_boton_press
 
                 if pygame.mouse.get_pressed()[0]:
-                    self.situacion = "Juego"
+                    self.situacion = "Selector"
                     run = False
             elif options_rect.collidepoint(pygame.mouse.get_pos()):
                 options_boton = option_boton_press
@@ -190,7 +192,27 @@ class Juego:
             pygame.display.update()
 
     def selector_niveles(self):
+        lista_archivos = []
+        boton_press = pygame.image.load(f"{DIR}Imagenes/boton_level_mark.png")
+        boton_press = pygame.transform.scale(boton_press, (200, 250))
+        for nombre_archivo in os.listdir("Data/Niveles"):
+            if nombre_archivo != "lvl_puntuacion.json":
+                lista_archivos.append(nombre_archivo)
+
+        with open('Data/Niveles/lvl_puntuacion.json', 'r', encoding='utf-8') as file:
+            lista_puntuacion = json.load(file)
         
+        lista_botones = []
+
+        for item in lista_puntuacion:
+            lista_botones.append(Boton_nivel(item["Nivel"],
+                                            item["Nivel"] * 225 - 170,
+                                            200,
+                                            item["Habilitado"],
+                                            item["Conseguido"],
+                                            item["Total"]))
+
+        #Boton_nivel(pos_x, pos_y, t/f habilitado, t/f si se lo paso)
         #For para lista de botones de cada nivel
         #Cada icono de nivel tiene que ser apretable,
         #Abajo va a tener un tick, un ~ o una cruz segun cuantos items agarraste
@@ -203,6 +225,33 @@ class Juego:
                 if evento.type == QUIT:
                     pygame.quit()
                     sys.exit()
+
+            for boton in lista_botones:
+                if boton.rectangulo_principal.collidepoint(pygame.mouse.get_pos()):
+                    boton.cambiar_marcado(True)
+                    if pygame.mouse.get_pressed()[0]:
+                        #self.situacion = "Juego"
+                        #self.nivel_a_cargar = boton.obtener_numero_nivel()
+                        #run = False      
+                        pass
+                else:
+                    boton.cambiar_marcado(False)
+
+            self.pantalla.fill("Black")
+
+
+            for boton in lista_botones:
+                self.pantalla.blit(boton.textura, 
+                                   (boton.obtener_rectangulo_principal_x(), 
+                                    boton.obtener_rectangulo_principal_y()))
+                
+                if (boton.obtener_marcado() == True and 
+                    boton.obtener_habilitado() == True):
+                    self.pantalla.blit(boton_press,
+                                       (boton.obtener_rectangulo_principal_x(),
+                                        boton.obtener_rectangulo_principal_y())
+                                        )
+                
             pygame.display.update()
             
     def nivel_juego(self):

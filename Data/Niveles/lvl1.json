@@ -6,26 +6,26 @@
         "Pos_y": 50
     },
     {
-    "Objeto": "Plataforma",
-    "Alto": 1,
-    "Ancho": 5,
-    "Pos_x": 100,
-    "Pos_y": 200,
-    "Path": "Imagenes/piso_pasto.png",
-    "Movible": "True",
-    "H_V": "True",
-    "Cant_mov": 5
+        "Objeto": "Plataforma",
+        "Alto": 1,
+        "Ancho": 5,
+        "Pos_x": 100,
+        "Pos_y": 200,
+        "Path": "Imagenes/piso_pasto.png",
+        "Movible": "True",
+        "H_V": "True",
+        "Cant_mov": 5
     },
     {
-    "Objeto": "Enemigo",
-    "Animacion": ["Imagenes/prota_quieto.png", "Imagenes/prota_quieto.png"],
-    "Pos_x": 300,
-    "Pos_y": 150
+        "Objeto": "Enemigo",
+        "Animacion": ["Imagenes/prota_quieto.png", "Imagenes/prota_quieto.png"],
+        "Pos_x": 300,
+        "Pos_y": 150
     },
     {
-    "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
-    "Pos_x": 350,
-    "Pos_y": 150
+        "Objeto": "Coleccionable",
+        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
+        "Pos_x": 350,
+        "Pos_y": 150
     }
 ]
