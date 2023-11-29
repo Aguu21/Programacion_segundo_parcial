@@ -21,6 +21,7 @@ class Juego:
 
     def __init__(self):
         pygame.init()
+        pygame.mixer.init()
         self.reloj = pygame.time.Clock()
         self.pantalla = pygame.display.set_mode((WIDTH, HEIGHT))
         self.debug = False
@@ -31,10 +32,17 @@ class Juego:
             self.lista_puntuacion = json.load(file)
         self.volumen_ambiental = config["ambiente"]
         self.volumen_sonidos = config["sonidos"]
+        pygame.mixer.music.load("Assets/Sonidos/background_music.wav")
+        self.sonidos = pygame.mixer.Channel(0)
+        self.hanlder_musica()
+        pygame.mixer.music.play(loops=-1)
         self.nivel_a_cargar = 0
         self.gano = None
 
-    
+    def hanlder_musica(self):
+        pygame.mixer.music.set_volume(self.volumen_ambiental)  
+        self.sonidos.set_volume(self.volumen_sonidos)
+
     def cargar(self):
         while True:
             eventos = pygame.event.get()
@@ -52,10 +60,10 @@ class Juego:
                 self.nivel_juego()
             elif self.situacion == "Pantalla Final":
                 self.pantalla_final(self.gano)
-            print(self.nivel_a_cargar)
             pygame.display.update()
 
     def menu_inicio(self):
+        background = pygame.image.load(f"{DIR}background_menu.jpg")
         start_boton_press = pygame.image.load(f"{DIR}start_boton_press.png")
         start_boton_unpress = pygame.image.load(f"{DIR}start_boton_unpress.png")
         start_boton_press = pygame.transform.scale(start_boton_press, (400, 100))
@@ -101,6 +109,7 @@ class Juego:
 
 
             self.pantalla.fill("Black")
+            self.pantalla.blit(background, (0, 0))
         
             self.pantalla.blit(start_boton, (start_rect.x, start_rect.y))
             self.pantalla.blit(options_boton, (options_rect.x, options_rect.y))
@@ -114,6 +123,7 @@ class Juego:
                 file, indent=2)
 
     def menu_config(self):
+        background = pygame.image.load(f"{DIR}background_menu.jpg")
         icono_volumen = pygame.image.load(f"{DIR}sound_icon.png")
         barra_volumen = pygame.image.load(f"{DIR}sound_bar.png")
         bola_volumen = pygame.image.load(f"{DIR}sound_ball.png")
@@ -170,12 +180,14 @@ class Juego:
                                                    150 + barra_volumen.get_width() - bola_volumen.get_width())
                         self.volumen_sonidos = round((bola_sonidos_rect.x - 150) / 435, 2)
                         self.guardar_config()
+                        self.hanlder_musica()
                             
                     elif arrastrar_ambiental:
                         bola_ambiental_rect.x = min(max(evento.pos[0] - bola_volumen.get_width() // 2, 150),\
                                                    150 + barra_volumen.get_width() - bola_volumen.get_width())
                         self.volumen_ambiental = round((bola_ambiental_rect.x - 150) / 435, 2)
                         self.guardar_config()
+                        self.hanlder_musica()
 
             if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
@@ -186,6 +198,7 @@ class Juego:
                 boton_volver = boton_volver_unpress
 
             self.pantalla.fill("White")
+            self.pantalla.blit(background, (0, 0))
 
             self.pantalla.blit(icono_volumen, (25, 200))
             self.pantalla.blit(barra_volumen, (150, 230))
@@ -201,6 +214,8 @@ class Juego:
 
     def selector_niveles(self):
         lista_archivos = []
+        background = pygame.image.load(f"{DIR}background_menu.jpg")
+
         boton_press = pygame.image.load(f"{DIR}boton_level_mark.png")
         boton_press = pygame.transform.scale(boton_press, (200, 250))
         for nombre_archivo in os.listdir("Data/Niveles"):
@@ -238,7 +253,7 @@ class Juego:
                     boton.cambiar_marcado(False)
 
             self.pantalla.fill("Black")
-
+            self.pantalla.blit(background, (0, 0))
 
             for boton in lista_botones:
                 if boton.obtener_marcado():
@@ -310,6 +325,18 @@ class Juego:
     def pantalla_final(self, gano):
         mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
         
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 38)
+
+        total = 0
+        conseguido = 0
+
+        for item in self.lista_puntuacion:
+            if item["Nivel"] == self.nivel_a_cargar:
+                total = item["Total"]
+                conseguido = item["Conseguido"]
+
+        texto_superficie = fuente_pixel.render(f"MEJOR SCORE: {conseguido}/{total}", True, (0,0,0))
+
         boton_siguiente = ""
         boton_siguiente_unpress = ""
         boton_siguiente_press = ""
@@ -317,8 +344,8 @@ class Juego:
             boton_siguiente_unpress = pygame.image.load(f"{DIR}boton_continue_unpress.png")
             boton_siguiente_press = pygame.image.load(f"{DIR}boton_continue_press.png")
         else:
-            boton_siguiente_unpress = pygame.image.load(f"{DIR}boton_retry_unpress")
-            boton_siguiente_press = pygame.image.load(f"{DIR}boton_retry_press")
+            boton_siguiente_unpress = pygame.image.load(f"{DIR}boton_retry_unpress.png")
+            boton_siguiente_press = pygame.image.load(f"{DIR}boton_retry_press.png")
         
         boton_siguiente_press = pygame.transform.scale(boton_siguiente_press, (250, 100))
         boton_siguiente_unpress = pygame.transform.scale(boton_siguiente_unpress, (250, 100))
@@ -340,7 +367,6 @@ class Juego:
                                   boton_volver_press.get_size()[0])) // 2 
         boton_volver_rect.y = 360
 
-        puntuacion_total = 0
 
         run = True
         while run:
@@ -375,6 +401,8 @@ class Juego:
             
             self.pantalla.blit(boton_volver, (boton_volver_rect.x,
                                                   boton_volver_rect.y))
+            
+            self.pantalla.blit(texto_superficie, ((self.pantalla.get_width() - texto_superficie.get_size()[0]) // 2, 175))
             pygame.display.update()          
 
     def nivel_juego(self):
@@ -386,13 +414,19 @@ class Juego:
         with open(f'Data/Niveles/lvl{self.nivel_a_cargar}.json', 'r', encoding='utf-8') as file:
             lista_objetos = json.load(file)
 
+        background = pygame.image.load(f"{DIR}background_lvl{self.nivel_a_cargar}.jpg")
+        corazon = pygame.image.load(f"{DIR}corazon.png")
+        corazon = pygame.transform.scale(corazon, (64, 64))
+        mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
+        
         protagonista = ""
         plataformas = []
         enemigos = []
         items = []
         proyectiles = []
         puerta = ""
-
+        puntuacion_total = 0
+        
         for item in lista_objetos:
             if item["Objeto"] == "Protagonista":
                 protagonista = Personaje(animaciones_prota, 
@@ -422,6 +456,13 @@ class Juego:
                                 item["Pos_x"],
                                 item["Pos_y"])
         run = True
+        pausa = False
+
+        salto_protagonista_sonido = pygame.mixer.Sound("Assets/Sonidos/salto_protagonista.wav")
+        disparo_protagonista_sonido = pygame.mixer.Sound("Assets/Sonidos/disparo_protagonista.wav")
+        morir_sonido = pygame.mixer.Sound("Assets/Sonidos/enemigo_muerte.wav")
+        abrir_puerta_sonido = pygame.mixer.Sound("Assets/Sonidos/abrir_puerta.wav")
+
         while run:
             self.reloj.tick(FPS)
             eventos = pygame.event.get()
@@ -432,75 +473,95 @@ class Juego:
                 elif evento.type == pygame.KEYDOWN:
                     if evento.key == pygame.K_TAB:
                         self.debug = not self.debug
-                    elif evento.key == pygame.K_e and protagonista.obtener_puede_salir():
-                        run = False
-                        self.situacion = "Pantalla Final"
-                        self.gano = True
-                        for item in self.lista_puntuacion:
-                            if item["Nivel"] == self.nivel_a_cargar + 1:
-                                item["Habilitado"] = "True"
-                                break
-                        with open('Data/Niveles/lvl_puntuaciones.json', 'w', encoding='utf-8') as file:
-                            json.dump(\
-                                self.lista_puntuacion,
-                                file, indent=2)
-                        #Actualizar puntaje
-                        pass
-                    elif not protagonista.obtener_esta_saltando() and protagonista.tocando_piso \
-                        and evento.key == pygame.K_UP:
-                        protagonista.modificar_esta_saltando(True)
-                        protagonista.salto = protagonista.altura_salto
-                    elif evento.key == pygame.K_SPACE:
-                        proyectiles.append(Proyectil(animaciones_proyectil,\
-                                                protagonista.rectangulo_principal.x,\
-                                                protagonista.rectangulo_principal.y, \
-                                                protagonista.donde_apunto))
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_LEFT]:
-                protagonista.moverse(False, True, plataformas, True)
-            elif keys[pygame.K_RIGHT]:
-                protagonista.moverse(True, False, plataformas, False)
-            else:
-                protagonista.moverse(False, False, plataformas)
+                    elif evento.key == pygame.K_ESCAPE or evento.key == pygame.K_p:
+                        pausa = not pausa
+                    if pausa == False:
+                        if evento.key == pygame.K_e and protagonista.obtener_puede_salir():
+                            run = False
+                            self.sonidos.play(abrir_puerta_sonido)
+                            self.situacion = "Pantalla Final"
+                            self.gano = True
+                            for item in self.lista_puntuacion:
+                                if item["Nivel"] == self.nivel_a_cargar:
+                                    if item["Conseguido"] <= puntuacion_total:
+                                        item["Conseguido"] = puntuacion_total
+                                if item["Nivel"] == self.nivel_a_cargar + 1:
+                                    item["Habilitado"] = "True"
+                                    break
+                            with open('Data/Niveles/lvl_puntuacion.json', 'w', encoding='utf-8') as file:
+                                json.dump(\
+                                    self.lista_puntuacion,
+                                    file, indent=2)
+                        elif not protagonista.obtener_esta_saltando() and protagonista.tocando_piso \
+                            and evento.key == pygame.K_UP:
+                            self.sonidos.play(salto_protagonista_sonido)
+                            protagonista.modificar_esta_saltando(True)
+                            protagonista.salto = protagonista.altura_salto
+                        elif evento.key == pygame.K_SPACE:
+                            proyectiles.append(Proyectil(animaciones_proyectil,\
+                                                    protagonista.rectangulo_principal.x,\
+                                                    protagonista.rectangulo_principal.y, \
+                                                    protagonista.donde_apunto))
+                            self.sonidos.play(disparo_protagonista_sonido)
             
-
             self.pantalla.fill("Black")
+            self.pantalla.blit(background, (0, 0))
             
-            
-            self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
-
-            self.pantalla.blit(protagonista.obtener_animacion_actual(), (protagonista.obtener_posicion_x(), protagonista.obtener_posicion_y()))
-
-            for enemigo in enemigos:
-                if enemigo.estoy_muerto:
-                    enemigos.remove(enemigo)
-                    del enemigo
+            if pausa == False:
+                keys = pygame.key.get_pressed()
+                if keys[pygame.K_LEFT]:
+                    protagonista.moverse(False, True, plataformas, True)
+                elif keys[pygame.K_RIGHT]:
+                    protagonista.moverse(True, False, plataformas, False)
                 else:
-                    enemigo.moverse(plataformas)
-                    enemigo.chequear_colisones_proyectil(proyectiles)
-                    self.pantalla.blit(enemigo.obtener_animacion_actual(), (enemigo.obtener_posicion_x(), enemigo.obtener_posicion_y()))
-        
-            protagonista.actualizar(enemigos, items, puerta)
+                    protagonista.moverse(False, False, plataformas)
+                
+                if protagonista.vida <= 0:
+                    run = False
+                    self.situacion = "Pantalla Final"
+                    self.gano = False
+
+                self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
+
+                self.pantalla.blit(protagonista.obtener_animacion_actual(), (protagonista.obtener_posicion_x(), protagonista.obtener_posicion_y()))
+
+                for enemigo in enemigos:
+                    if enemigo.estoy_muerto:
+                        enemigos.remove(enemigo)
+                        del enemigo
+                        puntuacion_total += 1
+                        self.sonidos.play(morir_sonido)
+                    else:
+                        enemigo.moverse(plataformas)
+                        enemigo.chequear_colisones_proyectil(proyectiles)
+                        self.pantalla.blit(enemigo.obtener_animacion_actual(), (enemigo.obtener_posicion_x(), enemigo.obtener_posicion_y()))
             
-            for plataforma in plataformas:
-                if plataforma.movible:
-                    plataforma.mover_plataforma()
-                self.pantalla.blit(plataforma.obtener_superficie(), (plataforma.obtener_posicion_x(), plataforma.obtener_posicion_y()))
-            
-            protagonista.aplicar_gravedad(plataformas)
+                puntuacion_total = protagonista.actualizar(enemigos, items, puerta, puntuacion_total, self.sonidos)
+                
+                for plataforma in plataformas:
+                    if plataforma.movible:
+                        plataforma.mover_plataforma()
+                    self.pantalla.blit(plataforma.obtener_superficie(), (plataforma.obtener_posicion_x(), plataforma.obtener_posicion_y()))
+                
+                protagonista.aplicar_gravedad(plataformas)
 
 
-            for proyectil in proyectiles:
-                if proyectil.estoy_muerto:
-                    proyectiles.remove(proyectil)
-                    del proyectil
-                else:
-                    proyectil.actualizar_proyectil(enemigos, plataformas)
-                    self.pantalla.blit(proyectil.obtener_animacion_actual(), (proyectil.obtener_posicion_x(), proyectil.obtener_posicion_y()))
-            
-            for item in items:
-                self.pantalla.blit(item.obtener_superficie(), (item.obtener_posicion_x(), item.obtener_posicion_y()))
+                for proyectil in proyectiles:
+                    if proyectil.estoy_muerto:
+                        proyectiles.remove(proyectil)
+                        del proyectil
+                    else:
+                        proyectil.actualizar_proyectil(enemigos, plataformas)
+                        self.pantalla.blit(proyectil.obtener_animacion_actual(), (proyectil.obtener_posicion_x(), proyectil.obtener_posicion_y()))
+                
+                for item in items:
+                    self.pantalla.blit(item.obtener_superficie(), (item.obtener_posicion_x(), item.obtener_posicion_y()))
 
+                for i in range(protagonista.vida):
+                    self.pantalla.blit(corazon, (10 + 80 * i, 10))
+            else:
+
+                pass
 
             if self.debug:
                 pygame.draw.rect(self.pantalla, (0,0,255), protagonista.obtener_rectangulo_principal(), 3)

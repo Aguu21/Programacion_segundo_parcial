@@ -1,4 +1,5 @@
 import pygame
+import random
 
 class Enemigo:
     def __init__(self, animaciones, pos_x, pos_y):
@@ -10,7 +11,10 @@ class Enemigo:
         self.rectangulo_principal.x = pos_x
         self.rectangulo_principal.y = pos_y
         self.estoy_muerto = False
-        self.velocidad = 1
+        if random.randint(0,1) == 0:
+            self.velocidad = 1
+        else:
+            self.velocidad = -1
 
     def animar(self):
         self.contador_pasos += 1
@@ -26,6 +30,13 @@ class Enemigo:
                 self.velocidad *= -1
             elif self.rectangulo_principal.colliderect(plataforma.lista_rectangulos[3]): #Choque con Derecha
                 self.velocidad *= -1
+        
+        if (self.rectangulo_principal.x >= 
+            (1216 - self.rectangulo_principal.width)):
+            self.velocidad *= -1
+        elif self.rectangulo_principal.x <= 0:
+            self.velocidad *= -1
+
 
         self.rectangulo_principal.x += self.velocidad
         self.animar()

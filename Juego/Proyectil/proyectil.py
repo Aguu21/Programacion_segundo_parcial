@@ -33,7 +33,7 @@ class Proyectil:
         for enemigo in enemigos:
             if self.rectangulo_principal.colliderect(enemigo.rectangulo_principal):
                 self.estoy_muerto = True
-                #Decirle al enemigo que se borre o haga algo
+                enemigo.estoy_muerto = True
                 return
         for plataforma in plataformas:
             if self.rectangulo_principal.colliderect(plataforma.lista_rectangulos[3]):

@@ -75,7 +75,7 @@
         "Objeto": "Plataforma",
         "Alto": 1,
         "Ancho": 1,
-        "Pos_x": 512,
+        "Pos_x": 768,
         "Pos_y": 544,
         "Path": "piso_pasto.png",
         "Movible": "False",
@@ -97,17 +97,6 @@
         "Objeto": "Plataforma",
         "Alto": 1,
         "Ancho": 1,
-        "Pos_x": 1148,
-        "Pos_y": 544,
-        "Path": "piso_pasto.png",
-        "Movible": "False",
-        "H_V": "False",
-        "Cant_mov": 0
-    },
-    {
-        "Objeto": "Plataforma",
-        "Alto": 1,
-        "Ancho": 1,
         "Pos_x": 1184,
         "Pos_y": 160,
         "Path": "piso_pasto.png",
@@ -118,7 +107,7 @@
     {
         "Objeto": "Enemigo",
         "Animacion": ["Imagenes/prota_quieto.png", "Imagenes/prota_quieto.png"],
-        "Pos_x": 544,
+        "Pos_x": 960,
         "Pos_y": 546
     },
     {

@@ -41,6 +41,15 @@ class Personaje:
                 self.rectangulo_principal.x = plataforma.rectangulo_principal.x - self.rectangulo_principal.width 
                 return
 
+        if (self.rectangulo_principal.x >= 
+            (1216 - self.rectangulo_principal.width)):
+            self.rectangulo_principal.x = 1216 - self.rectangulo_principal.width - 1
+            return
+        elif self.rectangulo_principal.x <= 0:
+            self.rectangulo_principal.x = 1
+            return
+
+
         self.esta_izquierda = esta_izquierda
         self.esta_derecha = esta_derecha
 
@@ -100,17 +109,24 @@ class Personaje:
             self.salto = 0
             self.esta_saltando = False
             
-    def colision_items(self, items):
+    def colision_items(self, items, puntuacion_total, canal_sonido):
         for item in items:
             if self.rectangulo_principal.colliderect(item.rectangulo_principal):
                 items.remove(item)
-                del item #Esto de borrarlo lo tendria que hacer el item
+                del item 
+                puntuacion_total += 1
+                agarrar_sonido = pygame.mixer.Sound("Assets/Sonidos/agarrar_protagonista.wav")
+                canal_sonido.play(agarrar_sonido)
+
+        return puntuacion_total
     
-    def colision_enemigos(self, enemigos):
+    def colision_enemigos(self, enemigos, canal_sonido):
         for enemigo in enemigos:
             if self.rectangulo_principal.colliderect(enemigo.rectangulo_principal) and self.cooldown <= 0:
                 self.vida -= 1
                 self.cooldown = 60
+                dano_sonido = pygame.mixer.Sound("Assets/Sonidos/dano_protagonista.wav")
+                canal_sonido.play(dano_sonido)
 
     def colision_puerta(self, puerta):
         if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
@@ -135,12 +151,14 @@ class Personaje:
             else:
                 self.animacion_actual = self.animaciones["jumping_left"][self.index_actual]
     
-    def actualizar(self, enemigos, items, puerta):
+    def actualizar(self, enemigos, items, puerta, puntuacion_total, canal_sonido):
         self.animar()
-        self.colision_enemigos(enemigos)
-        self.colision_items(items)
+        self.colision_enemigos(enemigos, canal_sonido)
+        puntuacion = self.colision_items(items, puntuacion_total, canal_sonido)
         self.colision_puerta(puerta)
         self.mover_rectangulos()
+        
+        return puntuacion
 
     def obtener_animacion_actual(self):
         return self.animacion_actual
