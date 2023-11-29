@@ -136,7 +136,19 @@
     {
         "Objeto": "Coleccionable",
         "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
-        "Pos_x": 292,
-        "Pos_y": 224
+        "Pos_x": 314,
+        "Pos_y": 208
+    },
+    {
+        "Objeto": "Coleccionable",
+        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
+        "Pos_x": 500,
+        "Pos_y": 144
+    },
+    {
+        "Objeto": "Puerta",
+        "Path": "puerta.png",
+        "Pos_x": 1187,
+        "Pos_y": 114
     }
 ]

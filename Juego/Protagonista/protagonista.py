@@ -3,8 +3,6 @@ import pygame
 class Personaje:
     def __init__(self, animaciones, velocidad, pos_x, pos_y):
         self.animaciones = animaciones
-        self.color_change_counter = 0
-        self.current_color_index = 0
         self.velocidad = velocidad
         self.salto = 10
         self.esta_saltando = False
@@ -19,7 +17,7 @@ class Personaje:
         self.rectangulo_principal.y = pos_y
         self.velocidad_gravedad = 4 #Se pega al techo si cambio esto
         self.altura_salto = 15  
-        self.gravedad_activa = True
+        self.puede_salir = False
         self.cooldown = 0
         self.vida = 3
         self.donde_apunto = True
@@ -114,6 +112,10 @@ class Personaje:
                 self.vida -= 1
                 self.cooldown = 60
 
+    def colision_puerta(self, puerta):
+        if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
+            self.cambiar_puede_salir(True)
+
     def animar(self):
         if self.cooldown > 0:
             self.cooldown -= 1
@@ -132,6 +134,14 @@ class Personaje:
                 self.animacion_actual = self.animaciones["jumping_right"][self.index_actual]
             else:
                 self.animacion_actual = self.animaciones["jumping_left"][self.index_actual]
+    
+    def actualizar(self, enemigos, items, puerta):
+        self.animar()
+        self.colision_enemigos(enemigos)
+        self.colision_items(items)
+        self.colision_puerta(puerta)
+        self.mover_rectangulos()
+
     def obtener_animacion_actual(self):
         return self.animacion_actual
     
@@ -143,3 +153,9 @@ class Personaje:
 
     def obtener_rectangulo_principal(self):
         return self.rectangulo_principal
+
+    def obtener_puede_salir(self):
+        return self.puede_salir
+    
+    def cambiar_puede_salir(self, cambio):
+        self.puede_salir = cambio   

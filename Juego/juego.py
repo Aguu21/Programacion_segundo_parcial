@@ -9,6 +9,8 @@ from Juego.Items.coleccionable import *
 from Juego.Enemigo.enemigo import *
 from Juego.Proyectil.proyectil import *
 from Juego.Boton.boton_nivel import *
+from Juego.Puerta.puerta import *
+
 
 WIDTH = 1216
 HEIGHT = 608
@@ -25,9 +27,12 @@ class Juego:
         self.situacion = "Inicio"
         with open('Data/Config/config.json', 'r', encoding='utf-8') as file:
             config = json.load(file)
+        with open('Data/Niveles/lvl_puntuacion.json', 'r', encoding='utf-8') as file:
+            self.lista_puntuacion = json.load(file)
         self.volumen_ambiental = config["ambiente"]
         self.volumen_sonidos = config["sonidos"]
         self.nivel_a_cargar = 0
+        self.gano = None
 
     
     def cargar(self):
@@ -45,6 +50,9 @@ class Juego:
                 self.selector_niveles()
             elif self.situacion == "Juego":
                 self.nivel_juego()
+            elif self.situacion == "Pantalla Final":
+                self.pantalla_final(self.gano)
+            print(self.nivel_a_cargar)
             pygame.display.update()
 
     def menu_inicio(self):
@@ -198,13 +206,10 @@ class Juego:
         for nombre_archivo in os.listdir("Data/Niveles"):
             if nombre_archivo != "lvl_puntuacion.json":
                 lista_archivos.append(nombre_archivo)
-
-        with open('Data/Niveles/lvl_puntuacion.json', 'r', encoding='utf-8') as file:
-            lista_puntuacion = json.load(file)
         
         lista_botones = []
 
-        for item in lista_puntuacion:
+        for item in self.lista_puntuacion:
             lista_botones.append(Boton_nivel(item["Nivel"],
                                             item["Nivel"] * 225 - 170,
                                             200,
@@ -220,9 +225,12 @@ class Juego:
                     sys.exit()
 
             for boton in lista_botones:
-                if boton.rectangulo_principal.collidepoint(pygame.mouse.get_pos()):
+                if (boton.rectangulo_principal.collidepoint(
+                    pygame.mouse.get_pos()) 
+                and boton.obtener_habilitado() == True):
+                    
                     boton.cambiar_marcado(True)
-                    if pygame.mouse.get_pressed()[0]:
+                    if pygame.mouse.get_pressed()[0] and boton.obtener_marcado() == True:
                         self.situacion = "Juego"
                         self.nivel_a_cargar = boton.obtener_numero_nivel()
                         run = False      
@@ -233,19 +241,16 @@ class Juego:
 
 
             for boton in lista_botones:
+                if boton.obtener_marcado():
+                    self.pantalla.blit(boton_press,(
+                                    boton.obtener_rectangulo_principal_x(), 
+                                    boton.obtener_rectangulo_principal_y()))
                 self.pantalla.blit(boton.textura, 
                                    (boton.obtener_rectangulo_principal_x(), 
                                     boton.obtener_rectangulo_principal_y()))
                 
-                if (boton.obtener_marcado() == True and 
-                    boton.obtener_habilitado() == True):
-                    self.pantalla.blit(boton_press,
-                                       (boton.obtener_rectangulo_principal_x(),
-                                        boton.obtener_rectangulo_principal_y())
-                                        )
                 
-            pygame.display.update()
-            
+            pygame.display.update()          
     
     def cargar_animaciones_prota(self):
         animaciones_prota = {
@@ -302,6 +307,76 @@ class Juego:
         else:
             return False
 
+    def pantalla_final(self, gano):
+        mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
+        
+        boton_siguiente = ""
+        boton_siguiente_unpress = ""
+        boton_siguiente_press = ""
+        if gano:
+            boton_siguiente_unpress = pygame.image.load(f"{DIR}boton_continue_unpress.png")
+            boton_siguiente_press = pygame.image.load(f"{DIR}boton_continue_press.png")
+        else:
+            boton_siguiente_unpress = pygame.image.load(f"{DIR}boton_retry_unpress")
+            boton_siguiente_press = pygame.image.load(f"{DIR}boton_retry_press")
+        
+        boton_siguiente_press = pygame.transform.scale(boton_siguiente_press, (250, 100))
+        boton_siguiente_unpress = pygame.transform.scale(boton_siguiente_unpress, (250, 100))
+
+        boton_siguiente_rect = boton_siguiente_press.get_rect()
+        boton_siguiente_rect.x = ((self.pantalla.get_width() - 
+                                  boton_siguiente_press.get_size()[0])) // 2 
+        boton_siguiente_rect.y = 245
+
+        boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
+        boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
+        boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
+        boton_volver_unpress = pygame.transform.scale(boton_volver_unpress, (250, 100))
+
+        boton_volver = boton_volver_unpress
+        
+        boton_volver_rect = boton_volver.get_rect()
+        boton_volver_rect.x = ((self.pantalla.get_width() - 
+                                  boton_volver_press.get_size()[0])) // 2 
+        boton_volver_rect.y = 360
+
+        puntuacion_total = 0
+
+        run = True
+        while run:
+            for evento in pygame.event.get():
+                if evento.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+            if boton_siguiente_rect.collidepoint(pygame.mouse.get_pos()):
+                boton_siguiente = boton_siguiente_press
+
+                if pygame.mouse.get_pressed()[0]:
+                    self.situacion = "Juego"
+                    if gano:
+                        self.nivel_a_cargar = self.nivel_a_cargar + 1
+                    run = False
+            elif boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
+                boton_volver = boton_volver_press
+                if pygame.mouse.get_pressed()[0]:
+                    self.situacion = "Selector"
+                    run = False
+            else:
+                boton_siguiente = boton_siguiente_unpress
+                boton_volver = boton_volver_unpress
+
+            self.pantalla.blit(mini_pantalla, 
+                               (((self.pantalla.get_width() - 
+                                  mini_pantalla.get_size()[0])) // 2,
+                                 100))
+            
+            self.pantalla.blit(boton_siguiente, (boton_siguiente_rect.x,
+                                                  boton_siguiente_rect.y))
+            
+            self.pantalla.blit(boton_volver, (boton_volver_rect.x,
+                                                  boton_volver_rect.y))
+            pygame.display.update()          
+
     def nivel_juego(self):
 
         animaciones_prota = self.cargar_animaciones_prota()
@@ -316,6 +391,7 @@ class Juego:
         enemigos = []
         items = []
         proyectiles = []
+        puerta = ""
 
         for item in lista_objetos:
             if item["Objeto"] == "Protagonista":
@@ -341,8 +417,12 @@ class Juego:
                 items.append(Coleccionable(animaciones_item,
                                            item["Pos_x"],
                                            item["Pos_y"]))
-
-        while True:
+            elif item["Objeto"] == "Puerta":
+                puerta = Puerta(f'{DIR}{item["Path"]}',
+                                item["Pos_x"],
+                                item["Pos_y"])
+        run = True
+        while run:
             self.reloj.tick(FPS)
             eventos = pygame.event.get()
             for evento in eventos:
@@ -352,6 +432,20 @@ class Juego:
                 elif evento.type == pygame.KEYDOWN:
                     if evento.key == pygame.K_TAB:
                         self.debug = not self.debug
+                    elif evento.key == pygame.K_e and protagonista.obtener_puede_salir():
+                        run = False
+                        self.situacion = "Pantalla Final"
+                        self.gano = True
+                        for item in self.lista_puntuacion:
+                            if item["Nivel"] == self.nivel_a_cargar + 1:
+                                item["Habilitado"] = "True"
+                                break
+                        with open('Data/Niveles/lvl_puntuaciones.json', 'w', encoding='utf-8') as file:
+                            json.dump(\
+                                self.lista_puntuacion,
+                                file, indent=2)
+                        #Actualizar puntaje
+                        pass
                     elif not protagonista.obtener_esta_saltando() and protagonista.tocando_piso \
                         and evento.key == pygame.K_UP:
                         protagonista.modificar_esta_saltando(True)
@@ -373,6 +467,7 @@ class Juego:
             self.pantalla.fill("Black")
             
             
+            self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
 
             self.pantalla.blit(protagonista.obtener_animacion_actual(), (protagonista.obtener_posicion_x(), protagonista.obtener_posicion_y()))
 
@@ -384,13 +479,9 @@ class Juego:
                     enemigo.moverse(plataformas)
                     enemigo.chequear_colisones_proyectil(proyectiles)
                     self.pantalla.blit(enemigo.obtener_animacion_actual(), (enemigo.obtener_posicion_x(), enemigo.obtener_posicion_y()))
-                
-            protagonista.animar()
-            protagonista.colision_enemigos(enemigos)
-            protagonista.colision_items(items)
-            protagonista.mover_rectangulos()
+        
+            protagonista.actualizar(enemigos, items, puerta)
             
-
             for plataforma in plataformas:
                 if plataforma.movible:
                     plataforma.mover_plataforma()
@@ -413,6 +504,7 @@ class Juego:
 
             if self.debug:
                 pygame.draw.rect(self.pantalla, (0,0,255), protagonista.obtener_rectangulo_principal(), 3)
+                pygame.draw.rect(self.pantalla, (0,0,255), puerta.obtener_rectangulo_principal(), 3)
                 for proyectil in proyectiles:
                     pygame.draw.rect(self.pantalla, (0,0,255), proyectil.obtener_rectangulo_principal(), 3)
                 for plataforma in plataformas:
