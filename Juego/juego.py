@@ -13,7 +13,7 @@ from Juego.Boton.boton_nivel import *
 WIDTH = 1216
 HEIGHT = 608
 FPS = 60
-DIR = "Assets/"
+DIR = "Assets/Imagenes/"
 
 class Juego:
 
@@ -48,13 +48,13 @@ class Juego:
             pygame.display.update()
 
     def menu_inicio(self):
-        start_boton_press = pygame.image.load(f"{DIR}Imagenes/start_boton_press.png")
-        start_boton_unpress = pygame.image.load(f"{DIR}Imagenes/start_boton_unpress.png")
+        start_boton_press = pygame.image.load(f"{DIR}start_boton_press.png")
+        start_boton_unpress = pygame.image.load(f"{DIR}start_boton_unpress.png")
         start_boton_press = pygame.transform.scale(start_boton_press, (400, 100))
         start_boton_unpress = pygame.transform.scale(start_boton_unpress, (400, 100))
 
-        option_boton_press = pygame.image.load(f"{DIR}Imagenes/boton_options_press.png")
-        option_boton_unpress = pygame.image.load(f"{DIR}Imagenes/boton_options_unpress.png")
+        option_boton_press = pygame.image.load(f"{DIR}boton_options_press.png")
+        option_boton_unpress = pygame.image.load(f"{DIR}boton_options_unpress.png")
         option_boton_press = pygame.transform.scale(option_boton_press, (450, 100))
         option_boton_unpress = pygame.transform.scale(option_boton_unpress, (450, 100))
 
@@ -106,12 +106,12 @@ class Juego:
                 file, indent=2)
 
     def menu_config(self):
-        icono_volumen = pygame.image.load(f"{DIR}Imagenes/sound_icon.png")
-        barra_volumen = pygame.image.load(f"{DIR}Imagenes/sound_bar.png")
-        bola_volumen = pygame.image.load(f"{DIR}Imagenes/sound_ball.png")
+        icono_volumen = pygame.image.load(f"{DIR}sound_icon.png")
+        barra_volumen = pygame.image.load(f"{DIR}sound_bar.png")
+        bola_volumen = pygame.image.load(f"{DIR}sound_ball.png")
         
-        boton_volver_unpress = pygame.image.load(f"{DIR}Imagenes/boton_return_unpress.png")
-        boton_volver_press = pygame.image.load(f"{DIR}Imagenes/boton_return_press.png")
+        boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
+        boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
         boton_volver_press = pygame.transform.scale(boton_volver_press, (450, 100))
         boton_volver_unpress = pygame.transform.scale(boton_volver_unpress, (450, 100))
 
@@ -193,7 +193,7 @@ class Juego:
 
     def selector_niveles(self):
         lista_archivos = []
-        boton_press = pygame.image.load(f"{DIR}Imagenes/boton_level_mark.png")
+        boton_press = pygame.image.load(f"{DIR}boton_level_mark.png")
         boton_press = pygame.transform.scale(boton_press, (200, 250))
         for nombre_archivo in os.listdir("Data/Niveles"):
             if nombre_archivo != "lvl_puntuacion.json":
@@ -211,13 +211,6 @@ class Juego:
                                             item["Habilitado"],
                                             item["Conseguido"],
                                             item["Total"]))
-
-        #Boton_nivel(pos_x, pos_y, t/f habilitado, t/f si se lo paso)
-        #For para lista de botones de cada nivel
-        #Cada icono de nivel tiene que ser apretable,
-        #Abajo va a tener un tick, un ~ o una cruz segun cuantos items agarraste
-        #Los que no se pueden avanzar porque el anterior no se termino, no cambia la skin al pasar el mouse
-        #Boton de return
         
         run = True
         while run:
@@ -230,10 +223,9 @@ class Juego:
                 if boton.rectangulo_principal.collidepoint(pygame.mouse.get_pos()):
                     boton.cambiar_marcado(True)
                     if pygame.mouse.get_pressed()[0]:
-                        #self.situacion = "Juego"
-                        #self.nivel_a_cargar = boton.obtener_numero_nivel()
-                        #run = False      
-                        pass
+                        self.situacion = "Juego"
+                        self.nivel_a_cargar = boton.obtener_numero_nivel()
+                        run = False      
                 else:
                     boton.cambiar_marcado(False)
 
@@ -254,54 +246,101 @@ class Juego:
                 
             pygame.display.update()
             
-    def nivel_juego(self):
+    
+    def cargar_animaciones_prota(self):
         animaciones_prota = {
-            "idle": [pygame.image.load(f"{DIR}Imagenes/prota_quieto.png"), pygame.image.load(f"{DIR}Imagenes/prota_quieto.png")],
-            "moving_left": [\
-                pygame.transform.flip(pygame.image.load(f"{DIR}Imagenes/prota_derecha_1.png"), True, False),
-                pygame.transform.flip(pygame.image.load(f"{DIR}Imagenes/prota_derecha_2.png"), True, False)],
-            "moving_right": [pygame.image.load(f"{DIR}Imagenes/prota_derecha_1.png"), pygame.image.load(f"{DIR}Imagenes/prota_derecha_2.png")],
-            "jumping_right": [pygame.image.load(f"{DIR}Imagenes/prota_salta_derecha.png"), pygame.image.load(f"{DIR}Imagenes/prota_salta_derecha.png")],
+            "idle": [
+                pygame.image.load(f"{DIR}prota_quieto.png"), 
+                pygame.image.load(f"{DIR}prota_quieto.png")],
+            "moving_left": [
+                pygame.transform.flip(pygame.image.load(
+                    f"{DIR}prota_derecha_1.png"), True, False),
+                pygame.transform.flip(pygame.image.load(
+                    f"{DIR}prota_derecha_2.png"), True, False)],
+            "moving_right": [
+                pygame.image.load(f"{DIR}prota_derecha_1.png"), 
+                pygame.image.load(f"{DIR}prota_derecha_2.png")],
+            "jumping_right": [
+                pygame.image.load(f"{DIR}prota_salta_derecha.png"),
+                pygame.image.load(f"{DIR}prota_salta_derecha.png")],
             "jumping_left": [\
-                pygame.transform.flip(pygame.image.load(f"{DIR}Imagenes/prota_salta_derecha.png"), True, False),
-                pygame.transform.flip(pygame.image.load(f"{DIR}Imagenes/prota_salta_derecha.png"), True, False)]
-        } 
+                pygame.transform.flip(pygame.image.load(
+                    f"{DIR}prota_salta_derecha.png"), True, False),
+                pygame.transform.flip(pygame.image.load(
+                    f"{DIR}prota_salta_derecha.png"), True, False)]
+        }
         for item in animaciones_prota:
             for i in range (len(animaciones_prota[item])):
-                animaciones_prota[item][i] = pygame.transform.scale(animaciones_prota[item][i], \
-                                                          (animaciones_prota[item][i].get_width()*2, animaciones_prota[item][i].get_height()*2))
+                animaciones_prota[item][i] = pygame.transform.scale(
+                    animaciones_prota[item][i],
+                    (animaciones_prota[item][i].get_width()*2, 
+                    animaciones_prota[item][i].get_height()*2))
         
-        
-        
-        
-        plataformas = [Plataforma(0,576,1,38,f"{DIR}Imagenes/piso_pasto.png"), #Piso 0,576 
-                       Plataforma(160, 512, 1, 3, f"{DIR}Imagenes/piso_pasto.png"), #Plataforma 1
-                       Plataforma(288, 412, 1, 3, f"{DIR}Imagenes/piso_pasto.png"),#Plataforma 2
-                       Plataforma(160, 320, 1, 3, f"{DIR}Imagenes/piso_pasto.png"),
-                       Plataforma(288, 224, 1, 3, f"{DIR}Imagenes/piso_pasto.png"),
-                       Plataforma(480, 224, 1, 5, f"{DIR}Imagenes/piso_pasto.png", True, True, 7),
-                       Plataforma(512, 544, 1, 1, f"{DIR}Imagenes/piso_pasto.png"),
-                       Plataforma(988, 224, 1, 4, f"{DIR}Imagenes/piso_pasto.png", True, False, 9),
-                       Plataforma(1148, 544, 1, 1,f"{DIR}Imagenes/piso_pasto.png")
-                       ] 
-        
+        return animaciones_prota
+                       
+    def cargar_animaciones_proyectil(self):
+        proyectil = [
+            pygame.image.load(f"{DIR}roca_1.png"),
+            pygame.image.load(f"{DIR}roca_2.png"),
+            pygame.image.load(f"{DIR}roca_3.png"),
+            pygame.image.load(f"{DIR}roca_4.png")]
+        return proyectil
 
-        protagonista = Personaje(animaciones_prota, 5, 100, 200)
+    def cargar_animaciones_item(self, path):
+        animaciones_item = [
+            pygame.image.load(f"{DIR}{path}"),
+            pygame.image.load(f"{DIR}{path}")]
+        for item in animaciones_item:
+            item = pygame.transform.scale(item,
+                                        (item.get_width() * 2,
+                                        item.get_height() * 2))
+        return animaciones_item
+
+    def txt_a_bool(self, valor:str):
+        if valor == "True":
+            return True
+        else:
+            return False
+
+    def nivel_juego(self):
+
+        animaciones_prota = self.cargar_animaciones_prota()
+        animaciones_item = self.cargar_animaciones_item("pata_carne.png")
+        animaciones_proyectil = self.cargar_animaciones_proyectil()
         
+        with open(f'Data/Niveles/lvl{self.nivel_a_cargar}.json', 'r', encoding='utf-8') as file:
+            lista_objetos = json.load(file)
+
+        protagonista = ""
+        plataformas = []
+        enemigos = []
+        items = []
         proyectiles = []
 
-        enemigos = [Enemigo(animaciones_prota, 544, 546)]
-        
-        animaciones_item = [pygame.image.load(f"{DIR}Imagenes/pata_carne.png"),pygame.image.load(f"{DIR}Imagenes/pata_carne.png")]
-        animaciones_proyectil = [pygame.image.load(f"{DIR}Imagenes/roca_1.png"),pygame.image.load(f"{DIR}Imagenes/roca_2.png"),
-                            pygame.image.load(f"{DIR}Imagenes/roca_3.png"),pygame.image.load(f"{DIR}Imagenes/roca_4.png")]
-        for item in animaciones_item:
-            item = pygame.transform.scale(item, (item.get_width()*2, item.get_height()*2))
-        items = [Coleccionable(animaciones_item, 200,300), Coleccionable(animaciones_item, 200, 470)]
-        for i in range(5):
-            for x in range(5):
-                items.append(Coleccionable(animaciones_item, x * 15 + 300, i * 15 + 300))
-
+        for item in lista_objetos:
+            if item["Objeto"] == "Protagonista":
+                protagonista = Personaje(animaciones_prota, 
+                                         item["Velocidad"], 
+                                         item["Pos_x"], 
+                                         item["Pos_y"])
+            
+            elif item["Objeto"] == "Plataforma":
+                plataformas.append(Plataforma(item["Pos_x"],
+                                              item["Pos_y"], 
+                                              item["Alto"], 
+                                              item["Ancho"], 
+                                              f'{DIR}{item["Path"]}', 
+                                              self.txt_a_bool(item["Movible"]), 
+                                              self.txt_a_bool(item["H_V"]), 
+                                              item["Cant_mov"]))
+            elif item["Objeto"] == "Enemigo":
+                enemigos.append(Enemigo(animaciones_prota,
+                                        item["Pos_x"], 
+                                        item["Pos_y"]))
+            elif item["Objeto"] == "Coleccionable":
+                items.append(Coleccionable(animaciones_item,
+                                           item["Pos_x"],
+                                           item["Pos_y"]))
 
         while True:
             self.reloj.tick(FPS)
