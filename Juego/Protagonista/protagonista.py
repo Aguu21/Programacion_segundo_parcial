@@ -34,6 +34,7 @@ class Personaje:
         lista_rectangulos = [top_rect, bottom_rect, left_rect, right_rect]
         return lista_rectangulos
 
+
     def moverse(self, esta_derecha, esta_izquierda, plataformas, mov = None):
     #Permite el movimiento segun las colisiones
         for plataforma in plataformas:
@@ -85,6 +86,9 @@ class Personaje:
 
     def aplicar_gravedad(self, plataformas):
     #Hace que el protagonista caia hasta encontrar una plataforma
+        if self.rectangulo_principal.y >= 610:
+            self.vida = 0
+            return
         if self.esta_saltando:
             self.rectangulo_principal.y -= self.salto
             self.salto -= 1

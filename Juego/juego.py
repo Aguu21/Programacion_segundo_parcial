@@ -415,6 +415,8 @@ class Juego:
                                   boton_siguiente_press.get_size()[0])) // 2 
         boton_siguiente_rect.y = 245
 
+        boton_siguiente = boton_siguiente_unpress
+
         boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
         boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
         boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
@@ -585,7 +587,7 @@ class Juego:
                                                     protagonista.donde_apunto))
                             self.sonidos.play(disparo_protagonista_sonido)
             
-            if pausa == False:
+            if not pausa:
                 keys = pygame.key.get_pressed()
                 if keys[pygame.K_LEFT]:
                     protagonista.moverse(False, True, plataformas, True)
