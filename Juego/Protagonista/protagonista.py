@@ -129,8 +129,16 @@ class Personaje:
                 canal_sonido.play(dano_sonido)
 
     def colision_puerta(self, puerta):
-        if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
-            self.cambiar_puede_salir(True)
+        if puerta != "":
+            if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
+                self.cambiar_puede_salir(True)
+
+    def colision_rayo(self, rayo, canal_sonido):
+        if self.rectangulo_principal.colliderect(rayo.obtener_rectangulo_principal()) and self.cooldown <= 0:
+            self.vida -= 1
+            self.cooldown = 60
+            dano_sonido = pygame.mixer.Sound("Assets/Sonidos/dano_protagonista.wav")
+            canal_sonido.play(dano_sonido)
 
     def animar(self):
         if self.cooldown > 0:

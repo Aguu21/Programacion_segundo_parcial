@@ -7,7 +7,9 @@ from Juego.Protagonista.protagonista import *
 from Juego.Plataforma.plataforma import *
 from Juego.Items.coleccionable import *
 from Juego.Enemigo.enemigo import *
+from Juego.Enemigo.boss import *
 from Juego.Proyectil.proyectil import *
+from Juego.Proyectil.rayo import *
 from Juego.Boton.boton_nivel import *
 from Juego.Puerta.puerta import *
 
@@ -226,7 +228,7 @@ class Juego:
 
         for item in self.lista_puntuacion:
             lista_botones.append(Boton_nivel(item["Nivel"],
-                                            item["Nivel"] * 225 - 170,
+                                            item["Nivel"] * 225 - 50,
                                             200,
                                             item["Habilitado"],
                                             item["Conseguido"],
@@ -442,6 +444,7 @@ class Juego:
         proyectiles = []
         puerta = ""
         puntuacion_total = 0
+        boss = ""
         
         for item in lista_objetos:
             if item["Objeto"] == "Protagonista":
@@ -471,6 +474,9 @@ class Juego:
                 puerta = Puerta(f'{DIR}{item["Path"]}',
                                 item["Pos_x"],
                                 item["Pos_y"])
+            elif item["Objeto"] == "Boss":
+                boss = Boss(item["Pos_x"], 
+                            item["Pos_y"])
         run = True
         pausa = False
 
@@ -492,7 +498,7 @@ class Juego:
                     elif evento.key == pygame.K_ESCAPE or evento.key == pygame.K_p:
                         pausa = not pausa
                     if pausa == False:
-                        if evento.key == pygame.K_e and protagonista.obtener_puede_salir():
+                        if evento.key == pygame.K_e and protagonista.obtener_puede_salir() and puerta != "":
                             run = False
                             self.sonidos.play(abrir_puerta_sonido)
                             self.situacion = "Pantalla Final"
@@ -536,10 +542,28 @@ class Juego:
                     self.situacion = "Pantalla Final"
                     self.gano = False
 
+                if boss != "" and boss.murio == True:
+                    run = False
+                    self.situacion = "Pantalla Final"
+                    puntuacion_total += 1
+                    self.gano = True
+                    for item in self.lista_puntuacion:
+                        if item["Nivel"] == self.nivel_a_cargar:
+                            if item["Conseguido"] <= puntuacion_total:
+                                item["Conseguido"] = puntuacion_total
+                            break
+                    with open(
+                        'Data/Niveles/lvl_puntuacion.json', 'w', 
+                        encoding='utf-8') as file:
+                        json.dump(\
+                            self.lista_puntuacion,
+                            file, indent=2)
+
                 self.pantalla.fill("Black")
                 self.pantalla.blit(background, (0, 0))
                 
-                self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
+                if puerta != "":
+                    self.pantalla.blit(puerta.obtener_textura(), (puerta.obtener_posicion_x(), puerta.obtener_posicion_y()))
 
                 self.pantalla.blit(protagonista.obtener_animacion_actual(), (protagonista.obtener_posicion_x(), protagonista.obtener_posicion_y()))
 
@@ -569,7 +593,7 @@ class Juego:
                         proyectiles.remove(proyectil)
                         del proyectil
                     else:
-                        proyectil.actualizar_proyectil(enemigos, plataformas)
+                        proyectil.actualizar_proyectil(enemigos, plataformas, boss)
                         self.pantalla.blit(proyectil.obtener_animacion_actual(), (proyectil.obtener_posicion_x(), proyectil.obtener_posicion_y()))
                 
                 for item in items:
@@ -577,6 +601,13 @@ class Juego:
 
                 for i in range(protagonista.vida):
                     self.pantalla.blit(corazon, (10 + 80 * i, 10))
+
+                if boss != "":
+                    boss.que_hacer(proyectiles)
+                    protagonista.colision_rayo(boss.rayo, self.sonidos)
+                    self.pantalla.blit(boss.obtener_animacion_actual(), (boss.rectangulo_principal.x, boss.rectangulo_principal.y))
+                    if boss.rayo.obtener_activo():
+                        self.pantalla.blit(boss.rayo.obtener_animacion_actual(), (boss.rayo.rectangulo_principal.x, boss.rayo.rectangulo_principal.y))
             else:
                 if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                     boton_volver = boton_volver_press
@@ -597,7 +628,11 @@ class Juego:
 
             if self.debug:
                 pygame.draw.rect(self.pantalla, (0,0,255), protagonista.obtener_rectangulo_principal(), 3)
-                pygame.draw.rect(self.pantalla, (0,0,255), puerta.obtener_rectangulo_principal(), 3)
+                if puerta != "":
+                    pygame.draw.rect(self.pantalla, (0,0,255), puerta.obtener_rectangulo_principal(), 3)
+                if boss != "":
+                    pygame.draw.rect(self.pantalla, (0,0,255), boss.obtener_rectangulo_principal(), 3)
+                    pygame.draw.rect(self.pantalla, (0,0,255), boss.rayo.obtener_rectangulo_principal(), 3)
                 for proyectil in proyectiles:
                     pygame.draw.rect(self.pantalla, (0,0,255), proyectil.obtener_rectangulo_principal(), 3)
                 for plataforma in plataformas:

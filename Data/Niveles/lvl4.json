@@ -1,0 +1,68 @@
+[
+{
+    "Objeto":"Protagonista",
+    "Velocidad": 5,
+    "Pos_x": 1000,
+    "Pos_y": 500   
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 38,
+    "Pos_x": 0,
+    "Pos_y": 576,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 4,
+    "Pos_x": 768,
+    "Pos_y": 480,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 4,
+    "Pos_x": 928,
+    "Pos_y": 384,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 4,
+    "Pos_x": 608,
+    "Pos_y": 384,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 4,
+    "Pos_x": 768,
+    "Pos_y": 288,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Boss",
+    "Pos_x": 50,
+    "Pos_y": 200
+}
+]

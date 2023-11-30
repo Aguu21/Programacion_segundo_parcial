@@ -16,7 +16,9 @@ class Proyectil:
     def animar(self):
         self.contador_pasos += 1
         if self.contador_pasos >= 5:
-            self.index_actual = (self.index_actual + 1) % 2
+            self.index_actual = (self.index_actual + 1)
+            if self.index_actual == len(self.animaciones):
+                self.index_actual = 0
             self.contador_pasos = 0
 
         self.animacion_actual = self.animaciones[self.index_actual]
@@ -29,7 +31,7 @@ class Proyectil:
             self.rectangulo_principal.x -= self.velocidad
         
 
-    def chequear_colison(self, enemigos, plataformas):
+    def chequear_colison(self, enemigos, plataformas, boss):
         for enemigo in enemigos:
             if self.rectangulo_principal.colliderect(enemigo.rectangulo_principal):
                 self.estoy_muerto = True
@@ -42,13 +44,18 @@ class Proyectil:
             elif self.rectangulo_principal.colliderect(plataforma.lista_rectangulos[2]):
                 self.estoy_muerto = True
                 return
-            
+        
+        if boss != "":
+            if self.rectangulo_principal.colliderect(boss.rectangulo_principal):
+                self.estoy_muerto = True
+                return
+
         if self.rectangulo_principal.x > 1216 or self.rectangulo_principal.x < 0:
             self.estoy_muerto = True
 
-    def actualizar_proyectil(self, enemigos, plataformas):
+    def actualizar_proyectil(self, enemigos, plataformas, boss):
         self.moverse()
-        self.chequear_colison(enemigos, plataformas)
+        self.chequear_colison(enemigos, plataformas, boss)
 
     def obtener_animacion_actual(self):
         return self.animacion_actual
