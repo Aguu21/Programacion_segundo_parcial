@@ -2,6 +2,8 @@ import pygame
 import sys
 import json
 import os
+import sqlite3
+import re
 from pygame.locals import *
 from Juego.Protagonista.protagonista import *
 from Juego.Plataforma.plataforma import *
@@ -13,12 +15,12 @@ from Juego.Proyectil.rayo import *
 from Juego.Boton.boton_nivel import *
 from Juego.Puerta.puerta import *
 
-
 WIDTH = 1216
 HEIGHT = 608
 FPS = 60
 DIR = "Assets/Imagenes/"
 
+#Maneja los cambios de pantalla y la logica del juego
 class Juego:
 
     def __init__(self):
@@ -26,8 +28,9 @@ class Juego:
         pygame.mixer.init()
         self.reloj = pygame.time.Clock()
         self.pantalla = pygame.display.set_mode((WIDTH, HEIGHT))
+        pygame.display.set_caption("Prehistoric Quest")
         self.debug = False
-        self.situacion = "Inicio"
+        self.situacion = "Puntaje"
         with open('Data/Config/config.json', 'r', encoding='utf-8') as file:
             config = json.load(file)
         with open('Data/Niveles/lvl_puntuacion.json', 'r', encoding='utf-8') as file:
@@ -42,8 +45,17 @@ class Juego:
         self.gano = None
 
     def hanlder_musica(self):
+    #Cambia los volumenes a los marcados
         pygame.mixer.music.set_volume(self.volumen_ambiental)  
         self.sonidos.set_volume(self.volumen_sonidos)
+
+    def run_query(self, query:str, parameters = ()):
+    #Envia querys a la db
+        with sqlite3.connect("Data/DB/db.db") as conn:
+            cursor= conn.cursor()
+            result = cursor.execute(query, parameters)
+            conn.commit()
+        return result
 
     def cargar(self):
         while True:
@@ -62,9 +74,15 @@ class Juego:
                 self.nivel_juego()
             elif self.situacion == "Pantalla Final":
                 self.pantalla_final(self.gano)
+            elif self.situacion == "Puntaje":
+                self.puntajes()
             pygame.display.update()
 
     def menu_inicio(self):
+
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 100)
+        texto_titulo = fuente_pixel.render("PREHISTORIC QUEST", True, (255, 255, 255))
+
         background = pygame.image.load(f"{DIR}background_menu.jpg")
         start_boton_press = pygame.image.load(f"{DIR}start_boton_press.png")
         start_boton_unpress = pygame.image.load(f"{DIR}start_boton_unpress.png")
@@ -79,7 +97,7 @@ class Juego:
         start_boton = start_boton_press
         start_rect = start_boton.get_rect()
         start_rect.y = 450
-        start_rect.x = 100
+        start_rect.x = 200
 
         options_boton = option_boton_press
         options_rect = options_boton.get_rect()
@@ -115,14 +133,22 @@ class Juego:
         
             self.pantalla.blit(start_boton, (start_rect.x, start_rect.y))
             self.pantalla.blit(options_boton, (options_rect.x, options_rect.y))
+            self.pantalla.blit(texto_titulo, (self.centrar_objeto_pantalla(texto_titulo), 150))
             pygame.display.update()
 
     def guardar_config(self):
-        with open('Data/Config/config.json', 'w', encoding='utf-8') as file:
+        with open('Data/Config/config.json', 'w', 
+                  encoding='utf-8') as file:
             json.dump(\
                 {"ambiente":self.volumen_ambiental,
                  "sonidos":self.volumen_sonidos},
                 file, indent=2)
+
+    def guardar_puntuacion(self):
+        with open('Data/Niveles/lvl_puntuacion.json', 'w',
+                    encoding='utf-8') as file:
+            json.dump(self.lista_puntuacion,
+                      file, indent=2)
 
     def menu_config(self):
         background = pygame.image.load(f"{DIR}background_menu.jpg")
@@ -216,6 +242,9 @@ class Juego:
 
     def selector_niveles(self):
         lista_archivos = []
+
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 38)
+        texto_titulo = fuente_pixel.render("SELECTOR DE NIVELES", True, (255, 255, 255))
         background = pygame.image.load(f"{DIR}background_menu.jpg")
 
         boton_press = pygame.image.load(f"{DIR}boton_level_mark.png")
@@ -224,6 +253,17 @@ class Juego:
             if nombre_archivo != "lvl_puntuacion.json":
                 lista_archivos.append(nombre_archivo)
         
+        boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
+        boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
+        boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
+        boton_volver_unpress = pygame.transform.scale(boton_volver_unpress, (250, 100))
+
+        boton_volver = boton_volver_unpress
+        
+        boton_volver_rect = boton_volver.get_rect()
+        boton_volver_rect.x = 950
+        boton_volver_rect.y = 490
+
         lista_botones = []
 
         for item in self.lista_puntuacion:
@@ -253,6 +293,14 @@ class Juego:
                         run = False      
                 else:
                     boton.cambiar_marcado(False)
+            
+            if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
+                boton_volver = boton_volver_press
+                if pygame.mouse.get_pressed()[0]:
+                    self.situacion = "Inicio"
+                    run = False
+            else:
+                boton_volver = boton_volver_unpress
 
             self.pantalla.fill("Black")
             self.pantalla.blit(background, (0, 0))
@@ -265,8 +313,10 @@ class Juego:
                 self.pantalla.blit(boton.textura, 
                                    (boton.obtener_rectangulo_principal_x(), 
                                     boton.obtener_rectangulo_principal_y()))
-                
-                
+            
+            self.pantalla.blit(boton_volver, (boton_volver_rect.x, boton_volver_rect.y))
+            self.pantalla.blit(texto_titulo, (self.centrar_objeto_pantalla(texto_titulo), 100))
+
             pygame.display.update()          
     
     def cargar_animaciones_prota(self):
@@ -380,9 +430,12 @@ class Juego:
                 boton_siguiente = boton_siguiente_press
 
                 if pygame.mouse.get_pressed()[0]:
-                    self.situacion = "Juego"
-                    if gano:
-                        self.nivel_a_cargar = self.nivel_a_cargar + 1
+                    if self.nivel_a_cargar == 4:
+                        self.situacion == "Puntaje"
+                    else:
+                        self.situacion = "Juego"
+                        if gano:
+                            self.nivel_a_cargar = self.nivel_a_cargar + 1
                     run = False
             elif boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
@@ -510,10 +563,7 @@ class Juego:
                                 if item["Nivel"] == self.nivel_a_cargar + 1:
                                     item["Habilitado"] = "True"
                                     break
-                            with open('Data/Niveles/lvl_puntuacion.json', 'w', encoding='utf-8') as file:
-                                json.dump(\
-                                    self.lista_puntuacion,
-                                    file, indent=2)
+                            self.guardar_puntuacion()
                         elif not protagonista.obtener_esta_saltando() and protagonista.tocando_piso \
                             and evento.key == pygame.K_UP:
                             self.sonidos.play(salto_protagonista_sonido)
@@ -525,8 +575,6 @@ class Juego:
                                                     protagonista.rectangulo_principal.y, \
                                                     protagonista.donde_apunto))
                             self.sonidos.play(disparo_protagonista_sonido)
-            
-            
             
             if pausa == False:
                 keys = pygame.key.get_pressed()
@@ -552,12 +600,7 @@ class Juego:
                             if item["Conseguido"] <= puntuacion_total:
                                 item["Conseguido"] = puntuacion_total
                             break
-                    with open(
-                        'Data/Niveles/lvl_puntuacion.json', 'w', 
-                        encoding='utf-8') as file:
-                        json.dump(\
-                            self.lista_puntuacion,
-                            file, indent=2)
+                    self.guardar_puntuacion()
 
                 self.pantalla.fill("Black")
                 self.pantalla.blit(background, (0, 0))
@@ -646,3 +689,117 @@ class Juego:
                 
             
             pygame.display.update()
+
+    def validar_input(self, input):
+        return bool(re.match(r'^[A-Z]{1,3}$', input))
+
+    def capitalizar_input(self, input):
+        return input.upper()
+
+    def centrar_objeto_pantalla(self, objeto):
+        return ((self.pantalla.get_width() - objeto.get_size()[0])) // 2 
+
+    def obtener_tabla(self, fuente_pixel):
+        texto_puntajes = []
+        query = """SELECT nombre, puntaje_conseguido FROM puntaje 
+                ORDER BY puntaje_conseguido DESC
+                LIMIT 5; """
+        rows = self.run_query(query)
+        for row in rows:
+            texto_puntajes.append(fuente_pixel.render(
+                f"{row[0]} :  {row[1]}", True, (255, 255, 255)))
+        return texto_puntajes
+
+    def agregar_puntaje(self, nombre, puntaje):
+        query = """INSERT INTO puntaje (nombre, puntaje_conseguido)
+                VALUES (?, ?)"""
+        self.run_query(query, (nombre, puntaje))
+
+    def puntajes(self):
+        puntaje = 0
+        for item in self.lista_puntuacion:
+            puntaje += item["Conseguido"]
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 38)
+        texto_puntaje = fuente_pixel.render(f"PUNTAJE:         : {puntaje}", True, (255, 255, 255))
+        texto_top = fuente_pixel.render("TOP", True, (0,0,0))
+
+        texto_puntajes = self.obtener_tabla(fuente_pixel)
+        
+        boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
+        boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
+        boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
+        boton_volver_unpress = pygame.transform.scale(boton_volver_unpress, (250, 100))
+
+        boton_volver = boton_volver_unpress
+        
+        boton_volver_rect = boton_volver.get_rect()
+        boton_volver_rect.x = 950
+        boton_volver_rect.y = 490
+
+        background = pygame.image.load(f"{DIR}background_menu.jpg")
+        input_box = pygame.Rect(275, 102, 100, 32)
+        respuesta_usuario = ""
+        active = False
+        ingresado = False
+        color =  (0,0,0) 
+
+        run = True
+        while run:
+            for evento in pygame.event.get():
+                if evento.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if evento.type == pygame.MOUSEBUTTONDOWN:
+                    if not ingresado:
+                        if input_box.collidepoint(evento.pos):
+                            active = not active
+                        else:
+                            active = False
+                if evento.type == pygame.KEYDOWN:
+                    if active and not ingresado:
+                        if evento.key == pygame.K_RETURN:
+                            ingresado = True
+                            self.agregar_puntaje(respuesta_usuario, puntaje)
+                            texto_puntajes = self.obtener_tabla(fuente_pixel)
+                        elif evento.key == pygame.K_BACKSPACE:
+                            respuesta_usuario = respuesta_usuario[:-1]
+                        else:
+                            try:
+                                respuesta_usuario += evento.unicode
+                            except UnicodeEncodeError as e:
+                                print(f"Palabras no contempladas en unicode: {e}")
+                            
+                            respuesta_usuario = self.capitalizar_input(respuesta_usuario)
+                            if not self.validar_input(respuesta_usuario):
+                                respuesta_usuario = respuesta_usuario[:-1]
+            
+            if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
+                boton_volver = boton_volver_press
+                if pygame.mouse.get_pressed()[0]:
+                    self.situacion = "Selector"
+                    run = False
+            else:
+                boton_volver = boton_volver_unpress
+
+            self.pantalla.blit(background, (0, 0))
+            txt_input = fuente_pixel.render(respuesta_usuario, True, (255,255,255))
+
+            self.pantalla.blit(txt_input, (input_box.x + 5, input_box.y - 3)) #Input  
+
+            self.pantalla.blit(texto_puntaje, (100, 100))
+            self.pantalla.blit(texto_top, (self.centrar_objeto_pantalla(texto_top), 200))
+
+            for i in range (0, len(texto_puntajes)):
+                self.pantalla.blit(texto_puntajes[i], (self.centrar_objeto_pantalla(texto_puntajes[i]), 250 + 50 * i))
+
+            self.pantalla.blit(boton_volver, (boton_volver_rect.x, boton_volver_rect.y))
+
+            if active:
+                color = (255,255,255)
+            else:
+                color = (0, 0, 0)
+            
+            pygame.draw.rect(self.pantalla, color, input_box, 2)
+
+
+            pygame.display.update()         
