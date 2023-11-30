@@ -1,0 +1,13 @@
+[{
+    "Objeto":"Protagonista",
+    "Velocidad": 5,
+    "Pos_x": 100,
+    "Pos_y": 500
+},
+{
+    "Objeto": "Puerta",
+    "Path": "puerta.png",
+    "Pos_x": 1187,
+    "Pos_y": 114
+}
+]

@@ -275,7 +275,7 @@ class Juego:
             lista_botones.append(Boton_nivel(item["Nivel"],
                                             item["Nivel"] * 225 - 50,
                                             200,
-                                            item["Habilitado"],
+                                            self.txt_a_bool(item["Habilitado"]),
                                             item["Conseguido"],
                                             item["Total"]))
         
@@ -287,15 +287,14 @@ class Juego:
                     sys.exit()
 
             for boton in lista_botones:
-                if (boton.rectangulo_principal.collidepoint(
-                    pygame.mouse.get_pos()) 
-                and boton.obtener_habilitado() == True):
-                    
-                    boton.cambiar_marcado(True)
-                    if pygame.mouse.get_pressed()[0] and boton.obtener_marcado() == True:
-                        self.situacion = "Juego"
-                        self.nivel_a_cargar = boton.obtener_numero_nivel()
-                        run = False      
+                if ((boton.rectangulo_principal.collidepoint(
+                    pygame.mouse.get_pos())) 
+                and boton.obtener_habilitado()):
+                        boton.cambiar_marcado(True)
+                        if pygame.mouse.get_pressed()[0] and boton.obtener_marcado() == True:
+                            self.situacion = "Juego"
+                            self.nivel_a_cargar = boton.obtener_numero_nivel()
+                            run = False      
                 else:
                     boton.cambiar_marcado(False)
             
@@ -375,7 +374,11 @@ class Juego:
 
     def txt_a_bool(self, valor:str):
     #Convierte de txt a bool
-        return bool(valor.lower())
+        if valor.lower() == "true":
+            return True
+        else:
+            return False
+         
 
     def pantalla_final(self, gano):
     #Pantalla que se muestra sobre el final de un nivel.

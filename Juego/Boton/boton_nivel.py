@@ -5,7 +5,7 @@ class Boton_nivel:
     def __init__(self, numero_nivel, pos_x, pos_y, habilitado, puntuacion_obtenida, puntuacion_max):
         self.numero_nivel = numero_nivel
         self.textura = pygame.image.load(f"Assets/Imagenes/boton_level_empty.png")
-        self.habilitado = bool(habilitado.lower())
+        self.habilitado = habilitado
         self.marcado = False
         self.definir_imagen(puntuacion_obtenida, puntuacion_max)
         self.textura = pygame.transform.scale(self.textura, (200, 250))
