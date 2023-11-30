@@ -5,6 +5,83 @@
     "Pos_y": 500
 },
 {
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 23,
+    "Pos_x": 0,
+    "Pos_y": 576,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 3,
+    "Pos_x": 160,
+    "Pos_y": 512,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 3,
+    "Pos_x": 288,
+    "Pos_y": 416,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 3,
+    "Pos_x": 512,
+    "Pos_y": 416,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 2,
+    "Ancho": 3,
+    "Pos_x": 1120,
+    "Pos_y": 160,
+    "Path": "piso_ladrillo.png",
+    "Movible": "True",
+    "H_V": "False",
+    "Cant_mov": 5
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 3,
+    "Pos_x": 768,
+    "Pos_y": 416,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 3,
+    "Pos_x": 896,
+    "Pos_y": 320,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
     "Objeto": "Puerta",
     "Path": "puerta.png",
     "Pos_x": 1187,

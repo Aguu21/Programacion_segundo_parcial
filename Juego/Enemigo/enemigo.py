@@ -21,8 +21,10 @@ class Enemigo:
     def animar(self):
         self.contador_pasos += 1
         if self.contador_pasos >= 5:
-            self.index_actual = (self.index_actual + 1) % 2
+            self.index_actual = (self.index_actual + 1)
             self.contador_pasos = 0
+            if self.index_actual == len(self.animaciones["idle"]):
+                self.index_actual = 0
 
         self.animacion_actual = self.animaciones["idle"][self.index_actual]
 

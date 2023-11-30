@@ -44,10 +44,12 @@ class Juego:
         self.nivel_a_cargar = 0
         self.gano = None
 
+
     def hanlder_musica(self):
     #Cambia los volumenes a los marcados
         pygame.mixer.music.set_volume(self.volumen_ambiental)  
         self.sonidos.set_volume(self.volumen_sonidos)
+
 
     def run_query(self, query:str, parameters = ()):
     #Envia querys a la db
@@ -56,6 +58,7 @@ class Juego:
             result = cursor.execute(query, parameters)
             conn.commit()
         return result
+
 
     def cargar(self):
     #Maneja las pantallas
@@ -137,6 +140,7 @@ class Juego:
             self.pantalla.blit(texto_titulo, (self.centrar_objeto_pantalla(texto_titulo), 150))
             pygame.display.update()
 
+
     def guardar_config(self):
     #Guarda la config en el json
         with open('Data/Config/config.json', 'w', 
@@ -152,6 +156,7 @@ class Juego:
                     encoding='utf-8') as file:
             json.dump(self.lista_puntuacion,
                       file, indent=2)
+
 
     def menu_config(self):
     #Pantalla de config de volumen
@@ -244,6 +249,7 @@ class Juego:
 
             pygame.display.update()
 
+
     def selector_niveles(self):
     #Pantalla con botones para elegir el nivel, muestra su % cumplido
         lista_archivos = []
@@ -323,6 +329,7 @@ class Juego:
 
             pygame.display.update()          
     
+
     def cargar_animaciones_prota(self):
         animaciones_prota = {
             "idle": [
@@ -353,7 +360,8 @@ class Juego:
                     animaciones_prota[item][i].get_height()*2))
         
         return animaciones_prota
-                       
+
+
     def cargar_animaciones_proyectil(self):
         proyectil = [
             pygame.image.load(f"{DIR}roca_1.png"),
@@ -361,6 +369,7 @@ class Juego:
             pygame.image.load(f"{DIR}roca_3.png"),
             pygame.image.load(f"{DIR}roca_4.png")]
         return proyectil
+
 
     def cargar_animaciones_item(self, path):
         animaciones_item = [
@@ -372,13 +381,23 @@ class Juego:
                                         item.get_height() * 2))
         return animaciones_item
 
+
     def txt_a_bool(self, valor:str):
     #Convierte de txt a bool
         if valor.lower() == "true":
             return True
         else:
             return False
-         
+
+
+    def cargar_animaciones_enemigo(self): 
+        animacion = {"idle":[]}
+        for i in range(1, 5):
+            img = pygame.image.load(f"{DIR}Cangrejo/cangrejo_mov_{i}.png")
+            img = pygame.transform.scale(img, (32,32))
+            animacion["idle"].append(img)
+        return animacion
+    
 
     def pantalla_final(self, gano):
     #Pantalla que se muestra sobre el final de un nivel.
@@ -470,10 +489,12 @@ class Juego:
             self.pantalla.blit(texto_superficie, ((self.pantalla.get_width() - texto_superficie.get_size()[0]) // 2, 175))
             pygame.display.update()          
 
+
     def nivel_juego(self):
     #Pantalla del juego, carga el nivel segun json y hace la logica
 
         animaciones_prota = self.cargar_animaciones_prota()
+        animaciones_enemigo = self.cargar_animaciones_enemigo()
         animaciones_item = self.cargar_animaciones_item("pata_carne.png")
         animaciones_proyectil = self.cargar_animaciones_proyectil()
         
@@ -527,7 +548,7 @@ class Juego:
                                               self.txt_a_bool(item["H_V"]), 
                                               item["Cant_mov"]))
             elif item["Objeto"] == "Enemigo":
-                enemigos.append(Enemigo(animaciones_prota,
+                enemigos.append(Enemigo(animaciones_enemigo,
                                         item["Pos_x"], 
                                         item["Pos_y"]))
             elif item["Objeto"] == "Coleccionable":

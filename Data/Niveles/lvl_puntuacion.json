@@ -3,24 +3,24 @@
     "Nivel": 1,
     "Habilitado": "True",
     "Total": 5,
-    "Conseguido": -1
+    "Conseguido": 5
   },
   {
     "Nivel": 2,
     "Habilitado": "True",
     "Total": 5,
-    "Conseguido": -1
+    "Conseguido": 5
   },
   {
     "Nivel": 3,
-    "Habilitado": "False",
+    "Habilitado": "True",
     "Total": 10,
-    "Conseguido": -1
+    "Conseguido": 0
   },
   {
     "Nivel": 4,
-    "Habilitado": "False",
+    "Habilitado": "True",
     "Total": 1,
-    "Conseguido": -1
+    "Conseguido": 1
   }
 ]

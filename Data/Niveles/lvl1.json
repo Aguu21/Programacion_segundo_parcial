@@ -106,9 +106,8 @@
     },
     {
         "Objeto": "Enemigo",
-        "Animacion": ["Imagenes/prota_quieto.png", "Imagenes/prota_quieto.png"],
         "Pos_x": 960,
-        "Pos_y": 546
+        "Pos_y": 544
     },
     {
         "Objeto": "Coleccionable",
