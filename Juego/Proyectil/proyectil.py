@@ -1,5 +1,6 @@
 import pygame
 
+#Proyectil disparado por el jugador
 class Proyectil:
     def __init__(self, animaciones, pos_x, pos_y, derecha):
         self.animaciones = animaciones
@@ -13,6 +14,7 @@ class Proyectil:
         self.velocidad = 5
         self.estoy_muerto = False
 
+
     def animar(self):
         self.contador_pasos += 1
         if self.contador_pasos >= 5:
@@ -23,7 +25,9 @@ class Proyectil:
 
         self.animacion_actual = self.animaciones[self.index_actual]
 
+
     def moverse(self):
+    #Segun la direccion avanza
         self.animar()
         if self.direccion:
             self.rectangulo_principal.x += self.velocidad
@@ -53,18 +57,24 @@ class Proyectil:
         if self.rectangulo_principal.x > 1216 or self.rectangulo_principal.x < 0:
             self.estoy_muerto = True
 
+
     def actualizar_proyectil(self, enemigos, plataformas, boss):
+    #Genera los cambios necesarios por iteracion
         self.moverse()
         self.chequear_colison(enemigos, plataformas, boss)
+
 
     def obtener_animacion_actual(self):
         return self.animacion_actual
     
+
     def obtener_posicion_x(self):
         return self.rectangulo_principal.x
     
+
     def obtener_posicion_y(self):
         return self.rectangulo_principal.y
+
 
     def obtener_rectangulo_principal(self):
         return self.rectangulo_principal

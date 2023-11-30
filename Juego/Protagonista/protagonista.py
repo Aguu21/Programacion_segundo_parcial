@@ -1,5 +1,6 @@
 import pygame
 
+#El jugador lo controla, salta, camina, dispara y entra por puertas
 class Personaje:
     def __init__(self, animaciones, velocidad, pos_x, pos_y):
         self.animaciones = animaciones
@@ -23,7 +24,9 @@ class Personaje:
         self.donde_apunto = True
         self.lista_rectangulos = self.crear_partes_protagonista()
     
+
     def crear_partes_protagonista(self):
+    #Crea partes del protagonista, no se llego a ausar
         top_rect = pygame.Rect(self.rectangulo_principal.topleft, (self.rectangulo_principal.width, 15))
         bottom_rect = pygame.Rect(self.rectangulo_principal.bottomleft, (self.rectangulo_principal.width, 15))
         left_rect = pygame.Rect(self.rectangulo_principal.topleft, (15, self.rectangulo_principal.height))
@@ -32,7 +35,7 @@ class Personaje:
         return lista_rectangulos
 
     def moverse(self, esta_derecha, esta_izquierda, plataformas, mov = None):
-        
+    #Permite el movimiento segun las colisiones
         for plataforma in plataformas:
             if self.rectangulo_principal.colliderect(plataforma.lista_rectangulos[3]):
                 self.rectangulo_principal.x = plataforma.rectangulo_principal.x + plataforma.rectangulo_principal.width 
@@ -63,11 +66,14 @@ class Personaje:
 
     def obtener_esta_saltando(self):
         return self.esta_saltando
-    
+
+
     def modificar_esta_saltando(self, estado):
         self.esta_saltando = estado
 
+
     def mover_rectangulos(self):
+    #Acomoda los rectangulos al moverse
         for i in range(0,4):
             self.lista_rectangulos[i].y = self.rectangulo_principal.y
             self.lista_rectangulos[i].x = self.rectangulo_principal.x
@@ -78,6 +84,7 @@ class Personaje:
 
 
     def aplicar_gravedad(self, plataformas):
+    #Hace que el protagonista caia hasta encontrar una plataforma
         if self.esta_saltando:
             self.rectangulo_principal.y -= self.salto
             self.salto -= 1
@@ -109,6 +116,7 @@ class Personaje:
             self.salto = 0
             self.esta_saltando = False
             
+
     def colision_items(self, items, puntuacion_total, canal_sonido):
         for item in items:
             if self.rectangulo_principal.colliderect(item.rectangulo_principal):
@@ -119,7 +127,8 @@ class Personaje:
                 canal_sonido.play(agarrar_sonido)
 
         return puntuacion_total
-    
+
+
     def colision_enemigos(self, enemigos, canal_sonido):
         for enemigo in enemigos:
             if self.rectangulo_principal.colliderect(enemigo.rectangulo_principal) and self.cooldown <= 0:
@@ -128,10 +137,12 @@ class Personaje:
                 dano_sonido = pygame.mixer.Sound("Assets/Sonidos/dano_protagonista.wav")
                 canal_sonido.play(dano_sonido)
 
+
     def colision_puerta(self, puerta):
         if puerta != "":
             if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
                 self.cambiar_puede_salir(True)
+
 
     def colision_rayo(self, rayo, canal_sonido):
         if self.rectangulo_principal.colliderect(rayo.obtener_rectangulo_principal()) and self.cooldown <= 0:
@@ -139,6 +150,7 @@ class Personaje:
             self.cooldown = 60
             dano_sonido = pygame.mixer.Sound("Assets/Sonidos/dano_protagonista.wav")
             canal_sonido.play(dano_sonido)
+
 
     def animar(self):
         if self.cooldown > 0:
@@ -159,7 +171,9 @@ class Personaje:
             else:
                 self.animacion_actual = self.animaciones["jumping_left"][self.index_actual]
     
+
     def actualizar(self, enemigos, items, puerta, puntuacion_total, canal_sonido):
+    #Genera los cambios necesarios por iteracion
         self.animar()
         self.colision_enemigos(enemigos, canal_sonido)
         puntuacion = self.colision_items(items, puntuacion_total, canal_sonido)
@@ -168,20 +182,26 @@ class Personaje:
         
         return puntuacion
 
+
     def obtener_animacion_actual(self):
         return self.animacion_actual
     
+
     def obtener_posicion_x(self):
         return self.rectangulo_principal.x
     
+
     def obtener_posicion_y(self):
         return self.rectangulo_principal.y
+
 
     def obtener_rectangulo_principal(self):
         return self.rectangulo_principal
 
+
     def obtener_puede_salir(self):
         return self.puede_salir
+    
     
     def cambiar_puede_salir(self, cambio):
         self.puede_salir = cambio   

@@ -1,6 +1,7 @@
 import pygame
 import random
 
+#Enemigo simple que solo se mueve y causa daño al tocarlo
 class Enemigo:
     def __init__(self, animaciones, pos_x, pos_y):
         self.animaciones = animaciones
@@ -16,6 +17,7 @@ class Enemigo:
         else:
             self.velocidad = -1
 
+
     def animar(self):
         self.contador_pasos += 1
         if self.contador_pasos >= 5:
@@ -24,7 +26,9 @@ class Enemigo:
 
         self.animacion_actual = self.animaciones["idle"][self.index_actual]
 
+
     def moverse(self, plataformas):
+    #Se mueve hasta chocar con algo y cambiar de direccion
         for plataforma in plataformas:
             if self.rectangulo_principal.colliderect(plataforma.lista_rectangulos[2]): #Choque con Izquierda
                 self.velocidad *= -1
@@ -41,19 +45,24 @@ class Enemigo:
         self.rectangulo_principal.x += self.velocidad
         self.animar()
 
+
     def chequear_colisones_proyectil(self, proyectiles):
         for proyectil in proyectiles:
             if self.rectangulo_principal.colliderect(proyectil.rectangulo_principal):
                 self.estoy_muerto = True
 
+
     def obtener_animacion_actual(self):
         return self.animacion_actual
     
+
     def obtener_posicion_x(self):
         return self.rectangulo_principal.x
     
+
     def obtener_posicion_y(self):
         return self.rectangulo_principal.y
+
 
     def obtener_rectangulo_principal(self):
         return self.rectangulo_principal

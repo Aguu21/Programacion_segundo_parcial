@@ -30,7 +30,7 @@ class Juego:
         self.pantalla = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Prehistoric Quest")
         self.debug = False
-        self.situacion = "Puntaje"
+        self.situacion = "Inicio"
         with open('Data/Config/config.json', 'r', encoding='utf-8') as file:
             config = json.load(file)
         with open('Data/Niveles/lvl_puntuacion.json', 'r', encoding='utf-8') as file:
@@ -58,6 +58,7 @@ class Juego:
         return result
 
     def cargar(self):
+    #Maneja las pantallas
         while True:
             eventos = pygame.event.get()
             for evento in eventos:
@@ -79,7 +80,7 @@ class Juego:
             pygame.display.update()
 
     def menu_inicio(self):
-
+    #Pantalla de inicio, con start y config
         fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 100)
         texto_titulo = fuente_pixel.render("PREHISTORIC QUEST", True, (255, 255, 255))
 
@@ -137,6 +138,7 @@ class Juego:
             pygame.display.update()
 
     def guardar_config(self):
+    #Guarda la config en el json
         with open('Data/Config/config.json', 'w', 
                   encoding='utf-8') as file:
             json.dump(\
@@ -145,12 +147,14 @@ class Juego:
                 file, indent=2)
 
     def guardar_puntuacion(self):
+    #Guarda la puntuacion en el json
         with open('Data/Niveles/lvl_puntuacion.json', 'w',
                     encoding='utf-8') as file:
             json.dump(self.lista_puntuacion,
                       file, indent=2)
 
     def menu_config(self):
+    #Pantalla de config de volumen
         background = pygame.image.load(f"{DIR}background_menu.jpg")
         icono_volumen = pygame.image.load(f"{DIR}sound_icon.png")
         barra_volumen = pygame.image.load(f"{DIR}sound_bar.png")
@@ -203,7 +207,7 @@ class Juego:
 
                 if evento.type == pygame.MOUSEMOTION:
                     if arrastrar_sonido:
-                        # Update slider handle position based on mouse movement
+                        #La funcion permite no pasarse de los limites de la barra
                         bola_sonidos_rect.x = min(max(evento.pos[0] - bola_volumen.get_width() // 2, 150),\
                                                    150 + barra_volumen.get_width() - bola_volumen.get_width())
                         self.volumen_sonidos = round((bola_sonidos_rect.x - 150) / 435, 2)
@@ -241,6 +245,7 @@ class Juego:
             pygame.display.update()
 
     def selector_niveles(self):
+    #Pantalla con botones para elegir el nivel, muestra su % cumplido
         lista_archivos = []
 
         fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 38)
@@ -369,12 +374,12 @@ class Juego:
         return animaciones_item
 
     def txt_a_bool(self, valor:str):
-        if valor == "True":
-            return True
-        else:
-            return False
+    #Convierte de txt a bool
+        return bool(valor.lower())
 
     def pantalla_final(self, gano):
+    #Pantalla que se muestra sobre el final de un nivel.
+    #Maneja ganar o perder
         mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
         
         fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 38)
@@ -461,6 +466,7 @@ class Juego:
             pygame.display.update()          
 
     def nivel_juego(self):
+    #Pantalla del juego, carga el nivel segun json y hace la logica
 
         animaciones_prota = self.cargar_animaciones_prota()
         animaciones_item = self.cargar_animaciones_item("pata_carne.png")
@@ -691,15 +697,15 @@ class Juego:
             pygame.display.update()
 
     def validar_input(self, input):
+    #Valida que sea de tres caracteres alfabeticos
         return bool(re.match(r'^[A-Z]{1,3}$', input))
 
-    def capitalizar_input(self, input):
-        return input.upper()
-
     def centrar_objeto_pantalla(self, objeto):
+    #Dada una superficie, la centra en pantalla
         return ((self.pantalla.get_width() - objeto.get_size()[0])) // 2 
 
     def obtener_tabla(self, fuente_pixel):
+    #Ejecuta un query y devuelve una lista de superficies de texto
         texto_puntajes = []
         query = """SELECT nombre, puntaje_conseguido FROM puntaje 
                 ORDER BY puntaje_conseguido DESC
@@ -711,11 +717,13 @@ class Juego:
         return texto_puntajes
 
     def agregar_puntaje(self, nombre, puntaje):
+    #Ejecuta un query y guarda un nuevo puntaje
         query = """INSERT INTO puntaje (nombre, puntaje_conseguido)
                 VALUES (?, ?)"""
         self.run_query(query, (nombre, puntaje))
 
     def puntajes(self):
+    #Pantalla de puntajes, se ve el top y se puede ingresar el propio
         puntaje = 0
         for item in self.lista_puntuacion:
             puntaje += item["Conseguido"]
@@ -769,7 +777,7 @@ class Juego:
                             except UnicodeEncodeError as e:
                                 print(f"Palabras no contempladas en unicode: {e}")
                             
-                            respuesta_usuario = self.capitalizar_input(respuesta_usuario)
+                            respuesta_usuario = respuesta_usuario.upper()
                             if not self.validar_input(respuesta_usuario):
                                 respuesta_usuario = respuesta_usuario[:-1]
             

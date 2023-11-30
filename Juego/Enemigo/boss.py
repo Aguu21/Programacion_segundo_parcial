@@ -2,6 +2,7 @@ import pygame
 import random
 from Juego.Proyectil.rayo import *
 
+#Jefe final del juego, lanza un rayo al atacar
 class Boss:
     def __init__(self, pos_x, pos_y):
         idle = self.ajustar_tamano("Assets/Imagenes/Golem/golem_idle_", 5)
@@ -27,6 +28,7 @@ class Boss:
         self.posicion_y = pos_y
         self.vida = 10
 
+
     def ajustar_tamano(self, path, cant_frames):
         var = []
         for i in range(1,cant_frames):
@@ -35,11 +37,15 @@ class Boss:
             var.append(temp)
         return var
 
+
     def mover_rayo(self):
+    #Mueve el rayo de ataque para que coincida con la cabeza
         self.rayo.cambiar_posicion_y(self.rectangulo_principal.y + 15)
         self.rayo.cambiar_posicion_x(self.rectangulo_principal.x + 100)
 
+
     def animar(self):
+    #Rota la animacion
         if self.rayo.obtener_activo:
             self.rayo.animar()
         self.contador_pasos += 1
@@ -53,6 +59,7 @@ class Boss:
         if self.animacion_actual == self.animaciones["muerte"][len(self.animaciones["muerte"]) - 1]:
             self.murio = True
 
+
     def chequear_colisones_proyectil(self, proyectiles):
         if self.vida == 0:
             self.que_hago = "Morir"
@@ -61,7 +68,9 @@ class Boss:
             if self.rectangulo_principal.colliderect(proyectil.rectangulo_principal):
                 self.vida -= 1
 
+
     def que_hacer(self, proyectiles):
+    #Define que ejecutar segun los estados posibles
         self.animar()
         self.chequear_colisones_proyectil(proyectiles)
         rand = -1
@@ -79,6 +88,7 @@ class Boss:
                     self.posicion_y += posicion_extra
                 else:
                     self.posicion_y -= posicion_extra
+
         elif self.que_hago == "Moverme":
             if self.rectangulo_principal.y < self.posicion_y:
                 self.rectangulo_principal.y += 2
@@ -86,12 +96,14 @@ class Boss:
                 self.rectangulo_principal.y -= 2
             else:
                 self.que_hago = "Disparar"
+
         elif self.que_hago == "Disparar":
             self.index_actual = 0
             self.contador_pasos = 0
             self.nombre_animacion_actual = "laser"
             self.que_hago = "Disparando"
             self.rayo.cambiar_activo(True)
+
         elif self.que_hago == "Disparando":
             if (self.index_actual == len(self.animaciones["laser"]) - 1):
                 self.index_actual = 0
@@ -100,6 +112,7 @@ class Boss:
                 self.que_hago = "Elegir"
                 self.rayo.cambiar_activo(False)
                 self.rayo.reiniciar_animacion()
+                
         elif self.que_hago == "Morir":
             self.nombre_animacion_actual = "muerte"
             self.rayo.cambiar_activo(False)
@@ -107,14 +120,18 @@ class Boss:
 
         self.mover_rayo()
 
+
     def obtener_animacion_actual(self):
         return self.animacion_actual
     
+
     def obtener_posicion_x(self):
         return self.rectangulo_principal.x
     
+    
     def obtener_posicion_y(self):
         return self.rectangulo_principal.y
+
 
     def obtener_rectangulo_principal(self):
         return self.rectangulo_principal

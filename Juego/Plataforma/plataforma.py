@@ -1,5 +1,6 @@
 import pygame 
 
+#Plataforma movible que sostiene al personaje principal
 class Plataforma():
     def __init__(self, pos_x, pos_y,\
                 altura, ancho, \
@@ -18,7 +19,9 @@ class Plataforma():
         self.lista_rectangulos = self.crear_partes_plataforma()
         self.acomodar_rectangulos()
 
+
     def crear_plataforma(self, largo, alto):
+    #Permite generar texturas mas grandes
         rect_textura = self.textura.get_rect()
 
         superficie_completa = pygame.Surface((rect_textura.width * largo, rect_textura.height * alto))
@@ -31,8 +34,9 @@ class Plataforma():
         
         return superficie_completa, rectangulo_completo
     
+
     def crear_partes_plataforma(self):
-        
+    #Genera los diferentes rectangulos por cada lado
         top_rect = pygame.Rect(self.rectangulo_principal.topleft, \
                                 (self.rectangulo_principal.width, \
                                 self.rectangulo_principal.height - self.rectangulo_principal.height // 5))
@@ -47,7 +51,9 @@ class Plataforma():
         
         return lista_rectangulos
 
+
     def acomodar_rectangulos(self):
+    #Acomoda los rectangulos pequeños para las plataformas moviles
         for i in range(0,4):
             self.lista_rectangulos[i].y = self.rectangulo_principal.y
             self.lista_rectangulos[i].x = self.rectangulo_principal.x
@@ -58,6 +64,7 @@ class Plataforma():
             elif i == 3:
                 self.lista_rectangulos[i].x += self.rectangulo_principal.width - 15
                 self.lista_rectangulos[i].y += self.rectangulo_principal.height // 4
+
 
     def mover_plataforma(self):
         velocidad = 2
