@@ -146,6 +146,8 @@ class Personaje:
         if puerta != "":
             if self.rectangulo_principal.colliderect(puerta.obtener_rectangulo_principal()):
                 self.cambiar_puede_salir(True)
+            else:
+                self.cambiar_puede_salir(False)
 
 
     def colision_rayo(self, rayo, canal_sonido):

@@ -79,8 +79,10 @@ class Juego:
             elif self.situacion == "Pantalla Final":
                 self.pantalla_final(self.gano)
             elif self.situacion == "Puntaje":
+                print("Hola")
                 self.puntajes()
             pygame.display.update()
+
 
     def menu_inicio(self):
     #Pantalla de inicio, con start y config
@@ -460,7 +462,7 @@ class Juego:
 
                 if pygame.mouse.get_pressed()[0]:
                     if self.nivel_a_cargar == 4:
-                        self.situacion == "Puntaje"
+                        self.situacion = "Puntaje"
                     else:
                         self.situacion = "Juego"
                         if gano:
