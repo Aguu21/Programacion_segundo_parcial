@@ -373,17 +373,6 @@ class Juego:
         return proyectil
 
 
-    def cargar_animaciones_item(self, path):
-        animaciones_item = [
-            pygame.image.load(f"{DIR}{path}"),
-            pygame.image.load(f"{DIR}{path}")]
-        for item in animaciones_item:
-            item = pygame.transform.scale(item,
-                                        (item.get_width() * 2,
-                                        item.get_height() * 2))
-        return animaciones_item
-
-
     def txt_a_bool(self, valor:str):
     #Convierte de txt a bool
         if valor.lower() == "true":
@@ -497,7 +486,6 @@ class Juego:
 
         animaciones_prota = self.cargar_animaciones_prota()
         animaciones_enemigo = self.cargar_animaciones_enemigo()
-        animaciones_item = self.cargar_animaciones_item("pata_carne.png")
         animaciones_proyectil = self.cargar_animaciones_proyectil()
         
         with open(f'Data/Niveles/lvl{self.nivel_a_cargar}.json', 'r', encoding='utf-8') as file:
@@ -554,8 +542,8 @@ class Juego:
                                         item["Pos_x"], 
                                         item["Pos_y"]))
             elif item["Objeto"] == "Coleccionable":
-                items.append(Coleccionable(animaciones_item,
-                                           item["Pos_x"],
+                items.append(Coleccionable(item["Tipo"],
+                                           item["Pos_x"], 
                                            item["Pos_y"]))
             elif item["Objeto"] == "Puerta":
                 puerta = Puerta(f'{DIR}{item["Path"]}',
@@ -585,7 +573,11 @@ class Juego:
                     elif evento.key == pygame.K_ESCAPE or evento.key == pygame.K_p:
                         pausa = not pausa
                     if pausa == False:
-                        if evento.key == pygame.K_e and protagonista.obtener_puede_salir() and puerta != "":
+                        if( evento.key == pygame.K_e and 
+                           puerta != "" and
+                           protagonista.obtener_puede_salir() and
+                           puntuacion_total > 0):
+                            
                             run = False
                             self.sonidos.play(abrir_puerta_sonido)
                             self.situacion = "Pantalla Final"
@@ -724,13 +716,16 @@ class Juego:
             
             pygame.display.update()
 
+
     def validar_input(self, input):
     #Valida que sea de tres caracteres alfabeticos
         return bool(re.match(r'^[A-Z]{1,3}$', input))
 
+
     def centrar_objeto_pantalla(self, objeto):
     #Dada una superficie, la centra en pantalla
         return ((self.pantalla.get_width() - objeto.get_size()[0])) // 2 
+
 
     def obtener_tabla(self, fuente_pixel):
     #Ejecuta un query y devuelve una lista de superficies de texto
@@ -744,11 +739,13 @@ class Juego:
                 f"{row[0]} :  {row[1]}", True, (255, 255, 255)))
         return texto_puntajes
 
+
     def agregar_puntaje(self, nombre, puntaje):
     #Ejecuta un query y guarda un nuevo puntaje
         query = """INSERT INTO puntaje (nombre, puntaje_conseguido)
                 VALUES (?, ?)"""
         self.run_query(query, (nombre, puntaje))
+
 
     def puntajes(self):
     #Pantalla de puntajes, se ve el top y se puede ingresar el propio

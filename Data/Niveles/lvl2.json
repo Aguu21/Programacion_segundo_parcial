@@ -149,38 +149,39 @@
 },
 {
     "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
     "Pos_x": 1120,
-    "Pos_y": 144
+    "Pos_y": 144,
+    "Tipo": "coleccionable"
 },
 {
     "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
     "Pos_x": 1056,
-    "Pos_y": 272
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
 },
 {
     "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
     "Pos_x": 200,
-    "Pos_y": 500
+    "Pos_y": 500,
+    "Tipo": "coleccionable"
 },
 {
     "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
     "Pos_x": 458,
-    "Pos_y": 432
+    "Pos_y": 432,
+    "Tipo": "coleccionable"
 },
 {
     "Objeto": "Coleccionable",
-    "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
     "Pos_x": 672,
-    "Pos_y": 272
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
 },
 {
     "Objeto": "Puerta",
     "Path": "puerta.png",
     "Pos_x": 1187,
-    "Pos_y": 114
+    "Pos_y": 114,
+    "Tipo": "coleccionable"
 }
 ]

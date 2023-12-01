@@ -7,7 +7,7 @@
     },
     {
         "Objeto": "Plataforma",
-        "Alto": 1,
+        "Alto": 4,
         "Ancho": 38,
         "Pos_x": 0,
         "Pos_y": 576,
@@ -64,12 +64,23 @@
         "Objeto": "Plataforma",
         "Alto": 1,
         "Ancho": 5,
-        "Pos_x": 480,
+        "Pos_x": 576,
         "Pos_y": 224,
         "Path": "piso_pasto.png",
         "Movible": "True",
         "H_V": "True",
-        "Cant_mov": 7
+        "Cant_mov": 4
+    },
+    {
+        "Objeto": "Plataforma",
+        "Alto": 1,
+        "Ancho": 2,
+        "Pos_x": 480,
+        "Pos_y": 160,
+        "Path": "piso_pasto.png",
+        "Movible": "False",
+        "H_V": "False",
+        "Cant_mov": 0
     },
     {
         "Objeto": "Plataforma",
@@ -96,13 +107,40 @@
     {
         "Objeto": "Plataforma",
         "Alto": 1,
-        "Ancho": 1,
-        "Pos_x": 1184,
-        "Pos_y": 160,
+        "Ancho": 19,
+        "Pos_x": 608,
+        "Pos_y": 96,
         "Path": "piso_pasto.png",
         "Movible": "False",
         "H_V": "False",
         "Cant_mov": 0
+    },
+    {
+        "Objeto": "Plataforma",
+        "Alto": 1,
+        "Ancho": 1,
+        "Pos_x": 608,
+        "Pos_y": 64,
+        "Path": "piso_pasto.png",
+        "Movible": "False",
+        "H_V": "False",
+        "Cant_mov": 0
+    },
+    {
+        "Objeto": "Plataforma",
+        "Alto": 2,
+        "Ancho": 1,
+        "Pos_x": 1152,
+        "Pos_y": 0,
+        "Path": "piso_pasto.png",
+        "Movible": "False",
+        "H_V": "False",
+        "Cant_mov": 0
+    },
+    {
+        "Objeto": "Enemigo",
+        "Pos_x": 800,
+        "Pos_y": 64
     },
     {
         "Objeto": "Enemigo",
@@ -111,32 +149,38 @@
     },
     {
         "Objeto": "Coleccionable",
-        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
         "Pos_x": 1062,
-        "Pos_y": 208
+        "Pos_y": 208,
+        "Tipo": "coleccionable"
     },
     {
         "Objeto": "Coleccionable",
-        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
         "Pos_x": 742,
-        "Pos_y": 208
+        "Pos_y": 208,
+        "Tipo": "coleccionable"
     },
     {
         "Objeto": "Coleccionable",
-        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
         "Pos_x": 314,
-        "Pos_y": 208
+        "Pos_y": 208,
+        "Tipo": "coleccionable"
     },
     {
         "Objeto": "Coleccionable",
-        "Animacion": ["Imagenes/pata_carne.png", "Imagenes/pata_carne.png"],
         "Pos_x": 500,
-        "Pos_y": 144
+        "Pos_y": 144,
+        "Tipo": "coleccionable"
+    },
+    {
+        "Objeto": "Coleccionable",
+        "Pos_x": 776,
+        "Pos_y": 528,
+        "Tipo": "Vida"
     },
     {
         "Objeto": "Puerta",
         "Path": "puerta.png",
         "Pos_x": 1187,
-        "Pos_y": 114
+        "Pos_y": 50
     }
 ]

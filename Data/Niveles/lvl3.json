@@ -82,6 +82,66 @@
     "Cant_mov": 0
 },
 {
+    "Objeto": "Coleccionable",
+    "Pos_x": 432,
+    "Pos_y": 416,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 656,
+    "Pos_y": 288,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 672,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 688,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 704,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 720,
+    "Pos_y": 288,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 672,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 672,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 672,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 672,
+    "Pos_y": 272,
+    "Tipo": "coleccionable"
+},
+{
     "Objeto": "Puerta",
     "Path": "puerta.png",
     "Pos_x": 1187,

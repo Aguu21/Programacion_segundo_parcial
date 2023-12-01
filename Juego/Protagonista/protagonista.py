@@ -124,6 +124,8 @@ class Personaje:
     def colision_items(self, items, puntuacion_total, canal_sonido):
         for item in items:
             if self.rectangulo_principal.colliderect(item.rectangulo_principal):
+                if item.obtener_tipo() == "Vida":
+                    self.vida += 1
                 items.remove(item)
                 del item 
                 puntuacion_total += 1

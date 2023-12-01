@@ -2,8 +2,8 @@
   {
     "Nivel": 1,
     "Habilitado": "True",
-    "Total": 5,
-    "Conseguido": 5
+    "Total": 7,
+    "Conseguido": 7
   },
   {
     "Nivel": 2,
@@ -15,7 +15,7 @@
     "Nivel": 3,
     "Habilitado": "True",
     "Total": 10,
-    "Conseguido": 0
+    "Conseguido": 10
   },
   {
     "Nivel": 4,
