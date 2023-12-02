@@ -2,25 +2,25 @@
   {
     "Nivel": 1,
     "Habilitado": "True",
-    "Total": 7,
-    "Conseguido": 7
+    "Total": 10,
+    "Conseguido": -1
   },
   {
     "Nivel": 2,
-    "Habilitado": "True",
-    "Total": 5,
-    "Conseguido": 5
+    "Habilitado": "False",
+    "Total": 8,
+    "Conseguido": -1
   },
   {
     "Nivel": 3,
-    "Habilitado": "True",
-    "Total": 10,
-    "Conseguido": 10
+    "Habilitado": "False",
+    "Total": 13,
+    "Conseguido": -1
   },
   {
     "Nivel": 4,
-    "Habilitado": "True",
-    "Total": 1,
-    "Conseguido": 1
+    "Habilitado": "False",
+    "Total": 4,
+    "Conseguido": -1
   }
 ]

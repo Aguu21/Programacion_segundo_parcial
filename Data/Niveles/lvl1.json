@@ -132,7 +132,7 @@
         "Ancho": 1,
         "Pos_x": 1152,
         "Pos_y": 0,
-        "Path": "piso_pasto.png",
+        "Path": "piso_ladrillo.png",
         "Movible": "False",
         "H_V": "False",
         "Cant_mov": 0

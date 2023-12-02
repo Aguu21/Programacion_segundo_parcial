@@ -18,7 +18,7 @@ class Boton_nivel:
         #Segun el puntaje esta nunca revisado, completo o incompleto
         if puntuacion_conseguida == -1:
             self.textura = pygame.image.load(f"Assets/Imagenes/boton_level_empty.png")
-        elif puntuacion_conseguida == puntuacion_maxima:
+        elif puntuacion_conseguida >= puntuacion_maxima:
             self.textura = pygame.image.load(f"Assets/Imagenes/boton_level_check.png")
         else:
             self.textura = pygame.image.load(f"Assets/Imagenes/boton_level_block.png")

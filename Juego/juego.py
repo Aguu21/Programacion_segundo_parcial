@@ -43,7 +43,10 @@ class Juego:
         pygame.mixer.music.play(loops=-1)
         self.nivel_a_cargar = 0
         self.gano = None
+        self.tiempo_ronda = 60
 
+    def handler_tiempo(self):
+        self.tiempo_ronda = pygame.time.get_ticks() // 1000 + 60
 
     def hanlder_musica(self):
     #Cambia los volumenes a los marcados
@@ -81,6 +84,7 @@ class Juego:
             elif self.situacion == "Puntaje":
                 print("Hola")
                 self.puntajes()
+            self.handler_tiempo()
             pygame.display.update()
 
 
@@ -495,7 +499,8 @@ class Juego:
         corazon = pygame.image.load(f"{DIR}corazon.png")
         corazon = pygame.transform.scale(corazon, (64, 64))
         mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
-        
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 56)
+
         boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
         boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
         boton_volver_press = pygame.transform.scale(boton_volver_press, (250, 100))
@@ -507,7 +512,6 @@ class Juego:
         boton_volver_rect.x = ((self.pantalla.get_width() - 
                                   boton_volver_press.get_size()[0])) // 2 
         boton_volver_rect.y = 360
-        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 56)
 
         texto_superficie = fuente_pixel.render(f"PAUSA", True, (0,0,0))
 
@@ -520,7 +524,8 @@ class Juego:
         puerta = ""
         puntuacion_total = 0
         boss = ""
-        
+        tiempo_pausa = 0
+
         for item in lista_objetos:
             if item["Objeto"] == "Protagonista":
                 protagonista = Personaje(animaciones_prota, 
@@ -562,6 +567,10 @@ class Juego:
 
         while run:
             self.reloj.tick(FPS)
+            timerReal = pygame.time.get_ticks() // 1000
+            timer = self.tiempo_ronda - timerReal
+            txt_timer = fuente_pixel.render(f"{timer}", True, (0,0,0))
+
             eventos = pygame.event.get()
             for evento in eventos:
                 if evento.type == QUIT:
@@ -571,7 +580,12 @@ class Juego:
                     if evento.key == pygame.K_TAB:
                         self.debug = not self.debug
                     elif evento.key == pygame.K_ESCAPE or evento.key == pygame.K_p:
+                        if pausa:
+                            self.tiempo_ronda += tiempo_pausa - timer
+                        else:
+                            tiempo_pausa = timer
                         pausa = not pausa
+
                     if pausa == False:
                         if( evento.key == pygame.K_e and 
                            puerta != "" and
@@ -585,6 +599,7 @@ class Juego:
                             for item in self.lista_puntuacion:
                                 if item["Nivel"] == self.nivel_a_cargar:
                                     if item["Conseguido"] <= puntuacion_total:
+                                        puntuacion_total += self.puntaje_tiempo(timer) 
                                         item["Conseguido"] = puntuacion_total
                                 if item["Nivel"] == self.nivel_a_cargar + 1:
                                     item["Habilitado"] = "True"
@@ -611,6 +626,9 @@ class Juego:
                 else:
                     protagonista.moverse(False, False, plataformas)
                 
+                if timer <= 0:
+                    protagonista.vida = 0
+
                 if protagonista.vida <= 0:
                     run = False
                     self.situacion = "Pantalla Final"
@@ -677,11 +695,14 @@ class Juego:
                     self.pantalla.blit(boss.obtener_animacion_actual(), (boss.rectangulo_principal.x, boss.rectangulo_principal.y))
                     if boss.rayo.obtener_activo():
                         self.pantalla.blit(boss.rayo.obtener_animacion_actual(), (boss.rayo.rectangulo_principal.x, boss.rayo.rectangulo_principal.y))
+
+                self.pantalla.blit(txt_timer, (1100, 0))
             else:
                 if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                     boton_volver = boton_volver_press
                     if pygame.mouse.get_pressed()[0]:
                         pausa = False
+                        self.tiempo_ronda += tiempo_pausa - timer
                 else:
                     boton_volver = boton_volver_unpress
 
@@ -716,6 +737,13 @@ class Juego:
             
             pygame.display.update()
 
+    def puntaje_tiempo(self, timer):
+        if timer >= 30:
+            return 3
+        elif timer > 20 and timer < 30:
+            return 2
+        else:
+            return 1
 
     def validar_input(self, input):
     #Valida que sea de tres caracteres alfabeticos
