@@ -38,6 +38,8 @@ class Juego:
         self.volumen_ambiental = config["ambiente"]
         self.volumen_sonidos = config["sonidos"]
         pygame.mixer.music.load("Assets/Sonidos/background_music.wav")
+        self.click_sonido = pygame.mixer.Sound("Assets/Sonidos/click_sound.wav")
+
         self.sonidos = pygame.mixer.Channel(0)
         self.hanlder_musica()
         pygame.mixer.music.play(loops=-1)
@@ -125,12 +127,14 @@ class Juego:
                 start_boton = start_boton_press
 
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Selector"
                     run = False
             elif options_rect.collidepoint(pygame.mouse.get_pos()):
                 options_boton = option_boton_press
 
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Configuracion"
                     run = False
             else:
@@ -156,6 +160,7 @@ class Juego:
                  "sonidos":self.volumen_sonidos},
                 file, indent=2)
 
+
     def guardar_puntuacion(self):
     #Guarda la puntuacion en el json
         with open('Data/Niveles/lvl_puntuacion.json', 'w',
@@ -166,11 +171,16 @@ class Juego:
 
     def menu_config(self):
     #Pantalla de config de volumen
+        fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 70)
+
         background = pygame.image.load(f"{DIR}background_menu.jpg")
         icono_volumen = pygame.image.load(f"{DIR}sound_icon.png")
         barra_volumen = pygame.image.load(f"{DIR}sound_bar.png")
         bola_volumen = pygame.image.load(f"{DIR}sound_ball.png")
         
+        titulo_ambiente = fuente_pixel.render("VOLUMEN AMBIENTE", True, (255, 255, 255))
+        titulo_sonidos = fuente_pixel.render("VOLUMEN EFECTOS", True, (255, 255, 255))
+
         boton_volver_unpress = pygame.image.load(f"{DIR}boton_return_unpress.png")
         boton_volver_press = pygame.image.load(f"{DIR}boton_return_press.png")
         boton_volver_press = pygame.transform.scale(boton_volver_press, (450, 100))
@@ -190,10 +200,10 @@ class Juego:
         bola_sonidos_rect = bola_volumen.get_rect()
 
         bola_ambiental_rect.x = 150 + self.volumen_ambiental * 4.3 * 100
-        bola_ambiental_rect.y = 220
+        bola_ambiental_rect.y = 200
 
         bola_sonidos_rect.x = 150 + self.volumen_sonidos * 4.3 * 100
-        bola_sonidos_rect.y = 420
+        bola_sonidos_rect.y = 440
 
         arrastrar_ambiental = False
         arrastrar_sonido = False
@@ -235,6 +245,7 @@ class Juego:
             if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Inicio"
                     run = False      
             else:
@@ -243,12 +254,14 @@ class Juego:
             self.pantalla.fill("White")
             self.pantalla.blit(background, (0, 0))
 
-            self.pantalla.blit(icono_volumen, (25, 200))
-            self.pantalla.blit(barra_volumen, (150, 230))
+            self.pantalla.blit(titulo_ambiente, (25, 80))
+            self.pantalla.blit(icono_volumen, (25, 180))
+            self.pantalla.blit(barra_volumen, (150, 210))
             self.pantalla.blit(bola_volumen, (bola_ambiental_rect.x, bola_ambiental_rect.y))
 
-            self.pantalla.blit(icono_volumen, (25, 400))
-            self.pantalla.blit(barra_volumen, (150, 430))
+            self.pantalla.blit(titulo_sonidos, (25, 320))
+            self.pantalla.blit(icono_volumen, (25, 420))
+            self.pantalla.blit(barra_volumen, (150, 450))
             self.pantalla.blit(bola_volumen, (bola_sonidos_rect.x, bola_sonidos_rect.y))
             
             self.pantalla.blit(boton_volver, (boton_volver_rect.x, boton_volver_rect.y))
@@ -304,6 +317,7 @@ class Juego:
                 and boton.obtener_habilitado()):
                         boton.cambiar_marcado(True)
                         if pygame.mouse.get_pressed()[0] and boton.obtener_marcado() == True:
+                            self.sonidos.play(self.click_sonido)
                             self.situacion = "Juego"
                             self.nivel_a_cargar = boton.obtener_numero_nivel()
                             run = False      
@@ -313,6 +327,7 @@ class Juego:
             if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Inicio"
                     run = False
             else:
@@ -454,6 +469,7 @@ class Juego:
                 boton_siguiente = boton_siguiente_press
 
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     if self.nivel_a_cargar == 4:
                         self.situacion = "Puntaje"
                     else:
@@ -464,6 +480,7 @@ class Juego:
             elif boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Selector"
                     run = False
             else:
@@ -701,6 +718,7 @@ class Juego:
                 if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                     boton_volver = boton_volver_press
                     if pygame.mouse.get_pressed()[0]:
+                        self.sonidos.play(self.click_sonido)
                         pausa = False
                         self.tiempo_ronda += tiempo_pausa - timer
                 else:
@@ -737,6 +755,7 @@ class Juego:
             
             pygame.display.update()
 
+
     def puntaje_tiempo(self, timer):
         if timer >= 30:
             return 3
@@ -744,6 +763,7 @@ class Juego:
             return 2
         else:
             return 1
+
 
     def validar_input(self, input):
     #Valida que sea de tres caracteres alfabeticos
@@ -837,6 +857,7 @@ class Juego:
             if boton_volver_rect.collidepoint(pygame.mouse.get_pos()):
                 boton_volver = boton_volver_press
                 if pygame.mouse.get_pressed()[0]:
+                    self.sonidos.play(self.click_sonido)
                     self.situacion = "Selector"
                     run = False
             else:
