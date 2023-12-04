@@ -514,7 +514,10 @@ class Juego:
 
         background = pygame.image.load(f"{DIR}background_lvl{self.nivel_a_cargar}.jpg")
         corazon = pygame.image.load(f"{DIR}corazon.png")
+
         corazon = pygame.transform.scale(corazon, (64, 64))
+        lambda_vida_pos_x = lambda x: 10 + 80 * x
+
         mini_pantalla = pygame.image.load(f"{DIR}mark_empty.png")
         fuente_pixel = pygame.font.Font("Assets/Fuentes/upheavtt.ttf", 56)
 
@@ -705,8 +708,7 @@ class Juego:
                     self.pantalla.blit(item.obtener_superficie(), (item.obtener_posicion_x(), item.obtener_posicion_y()))
 
                 for i in range(protagonista.vida):
-                    self.pantalla.blit(corazon, (10 + 80 * i, 10))
-
+                    self.pantalla.blit(corazon, (lambda_vida_pos_x(i), 10))
                 if boss != "":
                     boss.que_hacer(proyectiles)
                     protagonista.colision_rayo(boss.rayo, self.sonidos)
