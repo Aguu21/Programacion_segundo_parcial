@@ -656,6 +656,7 @@ class Juego:
                     self.situacion = "Pantalla Final"
                     puntuacion_total += 1
                     self.gano = True
+                    puntuacion_total += self.puntaje_tiempo(timer)
                     for item in self.lista_puntuacion:
                         if item["Nivel"] == self.nivel_a_cargar:
                             if item["Conseguido"] <= puntuacion_total:

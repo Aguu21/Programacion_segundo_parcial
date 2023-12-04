@@ -1,16 +1,38 @@
 [{
     "Objeto":"Protagonista",
     "Velocidad": 5,
-    "Pos_x": 100,
+    "Pos_x": 10,
     "Pos_y": 500
 },
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 10,
+    "Ancho": 3,
     "Pos_x": 0,
     "Pos_y": 576,
     "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 2,
+    "Pos_x": 256,
+    "Pos_y": 576,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 1,
+    "Pos_x": 320,
+    "Pos_y": 544,
+    "Path": "piso_ladrillo.png",
     "Movible": "False",
     "H_V": "False",
     "Cant_mov": 0
@@ -29,8 +51,8 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 12,
-    "Pos_x": 352,
+    "Ancho": 1,
+    "Pos_x": 736,
     "Pos_y": 544,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -40,30 +62,8 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 11,
-    "Pos_x": 384,
-    "Pos_y": 512,
-    "Path": "piso_ladrillo.png",
-    "Movible": "False",
-    "H_V": "False",
-    "Cant_mov": 0
-},
-{
-    "Objeto": "Plataforma",
-    "Alto": 1,
-    "Ancho": 10,
-    "Pos_x": 416,
-    "Pos_y": 480,
-    "Path": "piso_ladrillo.png",
-    "Movible": "False",
-    "H_V": "False",
-    "Cant_mov": 0
-},
-{
-    "Objeto": "Plataforma",
-    "Alto": 1,
-    "Ancho": 9,
-    "Pos_x": 448,
+    "Ancho": 13,
+    "Pos_x": 320,
     "Pos_y": 448,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -73,8 +73,8 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 8,
-    "Pos_x": 480,
+    "Ancho": 1,
+    "Pos_x": 288,
     "Pos_y": 416,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -84,9 +84,9 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 7,
-    "Pos_x": 512,
-    "Pos_y": 384,
+    "Ancho": 1,
+    "Pos_x": 736,
+    "Pos_y": 416,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
     "H_V": "False",
@@ -95,9 +95,9 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 6,
-    "Pos_x": 544,
-    "Pos_y": 352,
+    "Ancho": 2,
+    "Pos_x": 832,
+    "Pos_y": 480,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
     "H_V": "False",
@@ -106,8 +106,8 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 5,
-    "Pos_x": 576,
+    "Ancho": 13,
+    "Pos_x": 320,
     "Pos_y": 320,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -117,8 +117,8 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
-    "Ancho": 4,
-    "Pos_x": 608,
+    "Ancho": 1,
+    "Pos_x": 288,
     "Pos_y": 288,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -127,9 +127,9 @@
 },
 {
     "Objeto": "Plataforma",
-    "Alto": 10,
-    "Ancho": 4,
-    "Pos_x": 992,
+    "Alto": 1,
+    "Ancho": 1,
+    "Pos_x": 736,
     "Pos_y": 288,
     "Path": "piso_ladrillo.png",
     "Movible": "False",
@@ -138,49 +138,136 @@
 },
 {
     "Objeto": "Plataforma",
-    "Alto": 5,
-    "Ancho": 3,
-    "Pos_x": 1120,
+    "Alto": 1,
+    "Ancho": 2,
+    "Pos_x": 160,
+    "Pos_y": 352,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 13,
+    "Pos_x": 320,
+    "Pos_y": 192,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 1,
+    "Pos_x": 288,
     "Pos_y": 160,
     "Path": "piso_ladrillo.png",
-    "Movible": "True",
+    "Movible": "False",
     "H_V": "False",
-    "Cant_mov": 5
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 1,
+    "Pos_x": 736,
+    "Pos_y": 160,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 2,
+    "Pos_x": 832,
+    "Pos_y": 224,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
+    "Ancho": 1,
+    "Pos_x": 0,
+    "Pos_y": 160,
+    "Path": "piso_pasto.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 521,
+    "Pos_y": 544
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 364,
+    "Pos_y": 416
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 669,
+    "Pos_y": 416
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 521,
+    "Pos_y": 288
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 364,
+    "Pos_y": 288
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 669,
+    "Pos_y": 288
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 368,
+    "Pos_y": 160
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 465,
+    "Pos_y": 160
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 561,
+    "Pos_y": 160
+},
+{
+    "Objeto": "Enemigo",
+    "Pos_x": 673,
+    "Pos_y": 160
 },
 {
     "Objeto": "Coleccionable",
-    "Pos_x": 1120,
-    "Pos_y": 144,
+    "Pos_x": 858,
+    "Pos_y": 450,
     "Tipo": "coleccionable"
 },
 {
     "Objeto": "Coleccionable",
-    "Pos_x": 1056,
-    "Pos_y": 272,
-    "Tipo": "coleccionable"
-},
-{
-    "Objeto": "Coleccionable",
-    "Pos_x": 200,
-    "Pos_y": 500,
-    "Tipo": "coleccionable"
-},
-{
-    "Objeto": "Coleccionable",
-    "Pos_x": 458,
-    "Pos_y": 432,
-    "Tipo": "coleccionable"
-},
-{
-    "Objeto": "Coleccionable",
-    "Pos_x": 672,
-    "Pos_y": 272,
-    "Tipo": "coleccionable"
+    "Pos_x": 858,
+    "Pos_y": 200,
+    "Tipo": "Vida"
 },
 {
     "Objeto": "Puerta",
     "Path": "puerta.png",
-    "Pos_x": 1187,
+    "Pos_x": 5,
     "Pos_y": 114,
     "Tipo": "coleccionable"
 }

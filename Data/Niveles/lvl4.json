@@ -61,6 +61,24 @@
     "Cant_mov": 0
 },
 {
+    "Objeto": "Coleccionable",
+    "Pos_x": 827,
+    "Pos_y": 191,
+    "Tipo": "Vida"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 545,
+    "Pos_y": 252,
+    "Tipo": "Vida"
+},
+{
+    "Objeto": "Coleccionable",
+    "Pos_x": 320,
+    "Pos_y": 551,
+    "Tipo": "Vida"
+},
+{
     "Objeto": "Boss",
     "Pos_x": 50,
     "Pos_y": 200

@@ -39,13 +39,13 @@ class Plataforma():
     #Genera los diferentes rectangulos por cada lado
         top_rect = pygame.Rect(self.rectangulo_principal.topleft, \
                                 (self.rectangulo_principal.width, \
-                                self.rectangulo_principal.height - self.rectangulo_principal.height // 5))
+                                self.rectangulo_principal.height // 8))
         bottom_rect = pygame.Rect(self.rectangulo_principal.bottomleft,\
                                 (self.rectangulo_principal.width,\
-                                self.rectangulo_principal.height // 5))
+                                self.rectangulo_principal.height // 8))
 
-        left_rect = pygame.Rect(self.rectangulo_principal.topleft, (15, self.rectangulo_principal.height // 2))
-        right_rect = pygame.Rect(self.rectangulo_principal.topright, (15, self.rectangulo_principal.height // 2))
+        left_rect = pygame.Rect(self.rectangulo_principal.topleft, (15, (self.rectangulo_principal.height // 4)*3))
+        right_rect = pygame.Rect(self.rectangulo_principal.topright, (15, (self.rectangulo_principal.height // 4)*3))
         
         lista_rectangulos = [top_rect, bottom_rect, left_rect, right_rect]
         
@@ -58,12 +58,12 @@ class Plataforma():
             self.lista_rectangulos[i].y = self.rectangulo_principal.y
             self.lista_rectangulos[i].x = self.rectangulo_principal.x
             if i == 1:
-                self.lista_rectangulos[i].y += (self.rectangulo_principal.height // 5) * 4
+                self.lista_rectangulos[i].y += (self.rectangulo_principal.height // 8) * 7
             elif i == 2:
-                self.lista_rectangulos[i].y += self.rectangulo_principal.height // 4
+                self.lista_rectangulos[i].y += self.rectangulo_principal.height // 8
             elif i == 3:
                 self.lista_rectangulos[i].x += self.rectangulo_principal.width - 15
-                self.lista_rectangulos[i].y += self.rectangulo_principal.height // 4
+                self.lista_rectangulos[i].y += self.rectangulo_principal.height // 8
 
 
     def mover_plataforma(self):
