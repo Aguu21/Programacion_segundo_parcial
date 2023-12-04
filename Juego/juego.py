@@ -47,8 +47,13 @@ class Juego:
         self.gano = None
         self.tiempo_ronda = 60
 
+        self.centrar_objeto_pantalla = lambda x: (self.pantalla.get_width() - x.get_size()[0]) // 2 
+        self.validar_input = lambda x: bool(re.match(r'^[A-Z]{1,3}$', x))
+
+
     def handler_tiempo(self):
         self.tiempo_ronda = pygame.time.get_ticks() // 1000 + 60
+
 
     def hanlder_musica(self):
     #Cambia los volumenes a los marcados
@@ -84,7 +89,6 @@ class Juego:
             elif self.situacion == "Pantalla Final":
                 self.pantalla_final(self.gano)
             elif self.situacion == "Puntaje":
-                print("Hola")
                 self.puntajes()
             self.handler_tiempo()
             pygame.display.update()
@@ -586,7 +590,6 @@ class Juego:
         abrir_puerta_sonido = pygame.mixer.Sound("Assets/Sonidos/abrir_puerta.wav")
 
         while run:
-            print(puntuacion_total)
             self.reloj.tick(FPS)
             timerReal = pygame.time.get_ticks() // 1000
             timer = self.tiempo_ronda - timerReal
@@ -767,16 +770,6 @@ class Juego:
             return 2
         else:
             return 1
-
-
-    def validar_input(self, input):
-    #Valida que sea de tres caracteres alfabeticos
-        return bool(re.match(r'^[A-Z]{1,3}$', input))
-
-
-    def centrar_objeto_pantalla(self, objeto):
-    #Dada una superficie, la centra en pantalla
-        return ((self.pantalla.get_width() - objeto.get_size()[0])) // 2 
 
 
     def obtener_tabla(self, fuente_pixel):
