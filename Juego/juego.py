@@ -586,6 +586,7 @@ class Juego:
         abrir_puerta_sonido = pygame.mixer.Sound("Assets/Sonidos/abrir_puerta.wav")
 
         while run:
+            print(puntuacion_total)
             self.reloj.tick(FPS)
             timerReal = pygame.time.get_ticks() // 1000
             timer = self.tiempo_ronda - timerReal
@@ -616,10 +617,10 @@ class Juego:
                             self.sonidos.play(abrir_puerta_sonido)
                             self.situacion = "Pantalla Final"
                             self.gano = True
+                            puntuacion_total += self.puntaje_tiempo(timer) 
                             for item in self.lista_puntuacion:
                                 if item["Nivel"] == self.nivel_a_cargar:
                                     if item["Conseguido"] <= puntuacion_total:
-                                        puntuacion_total += self.puntaje_tiempo(timer) 
                                         item["Conseguido"] = puntuacion_total
                                 if item["Nivel"] == self.nivel_a_cargar + 1:
                                     item["Habilitado"] = "True"

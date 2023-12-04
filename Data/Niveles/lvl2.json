@@ -194,6 +194,17 @@
 {
     "Objeto": "Plataforma",
     "Alto": 1,
+    "Ancho": 2,
+    "Pos_x": 160,
+    "Pos_y": 192,
+    "Path": "piso_ladrillo.png",
+    "Movible": "False",
+    "H_V": "False",
+    "Cant_mov": 0
+},
+{
+    "Objeto": "Plataforma",
+    "Alto": 1,
     "Ancho": 1,
     "Pos_x": 0,
     "Pos_y": 160,
